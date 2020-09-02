@@ -18,8 +18,9 @@ include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup(TARGETS KEEP_RPATHS)
 
 add_library(libpokemon_core src/core/pokemon/PokemonTemplate.cc include/core/pokemon/PokemonTemplate.h include/core/common.h include/core/pokemon/Pokemon.h include/core/pokemon/PokemonInstance.h include/core/pokemon/Hexagon.h src/core/pokemon/Pokemon.cc include/core/pokemon/pokemons/eevee.h src/core/pokemon/pokemons/eevee.cc include/core/action/Action.h include/core/action/AttackAction.h include/core/types/pokemon.h include/core/types/move.h src/core/action/AttackAction.cc src/core/action/SpAttackAction.cc include/core/action/SpAttackAction.h include/core/buff/Buff.h include/core/move/Move.h include/core/move/moves/Bite.h src/core/move/moves/Bite.cc include/core/move/AttackMove.h src/core/move/AttackMove.cc src/core/pokemon/PokemonInstance.cc include/core/pokemon/def.h include/core/pokemon/pokemons/type_map.h src/core/pokemon/pokemons/pikachu.cc include/core/pokemon/pokemons/pikachu.h src/core/move/SpAttackMove.cc include/core/move/SpAttackMove.h src/core/move/moves/Thunder.cc include/core/move/moves/Thunder.h include/core/battle/Battle.h src/core/battle/Battle.cc include/core/buff/buffs/HexBuff.h src/core/buff/buffs/HexBuff.cc include/core/action/BufAction.h src/core/action/BufAction.cc include/core/move/BufMove.h src/core/move/BufMove.cc src/core/move/moves/Charge.cc include/core/move/moves/Charge.h include/core/buff/buffs/TypeActionBuff.h src/core/buff/buffs/TypeActionBuff.cc src/core/move/moves/RisingVoltage.cc include/core/move/moves/RisingVoltage.h src/core/pokemon/tools.cc src/core/common.cc)
+add_library(libyadb include/yadb/Yadb.h src/yadb/Yadb.cc include/yadb/Subset.h src/yadb/Subset.cc)
 add_executable(client src/app/client/main.cc qml.qrc)
-add_executable(run_tests src/run_tests.cc tests/test_pokemon.cc tests/test_pokemoninstance.cc tests/test_battle.cc)
+add_executable(run_tests src/run_tests.cc tests/test_pokemon.cc tests/test_pokemoninstance.cc tests/test_battle.cc tests/test_yadb.cc)
 add_executable(terminal_demo src/terminal_demo.cc include/core/pokemon/tools.h)
 add_executable(server src/app/server/main.cc)
 
@@ -30,7 +31,15 @@ target_include_directories(
 )
 target_link_libraries(libpokemon_core Qt5::Network)
 
+target_include_directories(
+        libyadb
+        PUBLIC
+        "include/yadb"
+)
+target_link_libraries(libyadb Qt5::Core CONAN_PKG::nlohmann_json)
+
 target_link_libraries(run_tests libpokemon_core)
+target_link_libraries(run_tests libyadb)
 target_link_libraries(run_tests CONAN_PKG::gtest)
 
 target_link_libraries(terminal_demo libpokemon_core)
@@ -41,5 +50,6 @@ target_link_libraries(client Qt5::Widgets Qt5::Qml Qt5::Quick Qt5::Network)
 target_link_libraries(server libpokemon_core)
 target_link_libraries(server CONAN_PKG::nlohmann_json)
 target_link_libraries(server Qt5::Core Qt5::Network)
+target_link_libraries(server libyadb)
 
 add_test(test_all run_tests)

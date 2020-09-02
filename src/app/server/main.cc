@@ -6,11 +6,20 @@
 #include <QUdpSocket>
 #include <QNetworkDatagram>
 #include <QDebug>
+#include <nlohmann/json.hpp>
 
 using namespace std;
+using json = nlohmann::json;
 
 int main(int argc, char **argv) {
     QCoreApplication app(argc, argv);
+
+    // test code: json
+    json j;
+    j["test"] = "hello, world";
+    j["list"] = {1, 2, "3"};
+    QString s = j.dump().c_str();
+    qDebug() << s;
 
     // test code: a print-out udp listening server
     auto sock = new QUdpSocket(&app);
