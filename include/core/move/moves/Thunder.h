@@ -12,7 +12,7 @@ public:
     Thunder();
     ~Thunder() = default;
 
-    string name() const override;
+    [[nodiscard]] string name() const override;
 };
 
 
