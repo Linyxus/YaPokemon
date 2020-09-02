@@ -1,0 +1,5 @@
+/Users/linyxus/dev/pokemon-core/build/default/CMakeFiles/rebuild_cache.dir
+/Users/linyxus/dev/pokemon-core/build/default/CMakeFiles/edit_cache.dir
+/Users/linyxus/dev/pokemon-core/build/default/CMakeFiles/demo.dir
+/Users/linyxus/dev/pokemon-core/build/default/CMakeFiles/run_test.dir
+/Users/linyxus/dev/pokemon-core/build/default/CMakeFiles/libpokemon_core.dir
