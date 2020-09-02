@@ -55,6 +55,7 @@ string HexBuff::name() const {
     if (_axis == Speed) {
         return "速度" + f(_value);
     }
+    return {};
 }
 
 bool HexBuff::expire() const {

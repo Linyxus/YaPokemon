@@ -1,0 +1,18 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qtquickcontrols2.conf</file>
+        <file>static/pokemon.jpg</file>
+        <file>static/pokemon_2.jpg</file>
+        <file>static/pokemon_3.jpg</file>
+        <file>qml/GameButton.qml</file>
+        <file>qml/GameView.qml</file>
+        <file>qml/LoginBanner.qml</file>
+        <file>qml/LoginView.qml</file>
+        <file>qml/main.qml</file>
+        <file>qml/MainView.qml</file>
+        <file>qml/WelcomeView.qml</file>
+        <file>qml/GalleryButton.qml</file>
+    </qresource>
+    <qresource prefix="/static"/>
+    <qresource lang="zh-cn" prefix="/static"/>
+</RCC>
