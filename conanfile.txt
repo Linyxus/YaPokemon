@@ -1,5 +1,6 @@
 [requires]
 gtest/1.10.0
+nlohmann_json/3.9.1
 
 [generators]
 cmake

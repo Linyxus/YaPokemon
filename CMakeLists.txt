@@ -17,16 +17,16 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup(TARGETS KEEP_RPATHS)
 
-add_library(libpokemon_core src/core/pokemon/PokemonTemplate.cc include/pokemon/PokemonTemplate.h include/common.h include/pokemon/Pokemon.h include/pokemon/PokemonInstance.h include/pokemon/Hexagon.h src/core/pokemon/Pokemon.cc include/pokemon/pokemons/eevee.h src/core/pokemon/pokemons/eevee.cc include/action/Action.h include/action/AttackAction.h include/types/pokemon.h include/types/move.h src/core/action/AttackAction.cc src/core/action/SpAttackAction.cc include/action/SpAttackAction.h include/buff/Buff.h include/move/Move.h include/move/moves/Bite.h src/core/move/moves/Bite.cc include/move/AttackMove.h src/core/move/AttackMove.cc src/core/pokemon/PokemonInstance.cc include/pokemon/def.h include/pokemon/pokemons/type_map.h src/core/pokemon/pokemons/pikachu.cc include/pokemon/pokemons/pikachu.h src/core/move/SpAttackMove.cc include/move/SpAttackMove.h src/core/move/moves/Thunder.cc include/move/moves/Thunder.h include/battle/Battle.h src/core/battle/Battle.cc include/buff/buffs/HexBuff.h src/core/buff/buffs/HexBuff.cc include/action/BufAction.h src/core/action/BufAction.cc include/move/BufMove.h src/core/move/BufMove.cc src/core/move/moves/Charge.cc include/move/moves/Charge.h include/buff/buffs/TypeActionBuff.h src/core/buff/buffs/TypeActionBuff.cc src/core/move/moves/RisingVoltage.cc include/move/moves/RisingVoltage.h src/core/pokemon/tools.cc src/core/common.cc)
+add_library(libpokemon_core src/core/pokemon/PokemonTemplate.cc include/core/pokemon/PokemonTemplate.h include/core/common.h include/core/pokemon/Pokemon.h include/core/pokemon/PokemonInstance.h include/core/pokemon/Hexagon.h src/core/pokemon/Pokemon.cc include/core/pokemon/pokemons/eevee.h src/core/pokemon/pokemons/eevee.cc include/core/action/Action.h include/core/action/AttackAction.h include/core/types/pokemon.h include/core/types/move.h src/core/action/AttackAction.cc src/core/action/SpAttackAction.cc include/core/action/SpAttackAction.h include/core/buff/Buff.h include/core/move/Move.h include/core/move/moves/Bite.h src/core/move/moves/Bite.cc include/core/move/AttackMove.h src/core/move/AttackMove.cc src/core/pokemon/PokemonInstance.cc include/core/pokemon/def.h include/core/pokemon/pokemons/type_map.h src/core/pokemon/pokemons/pikachu.cc include/core/pokemon/pokemons/pikachu.h src/core/move/SpAttackMove.cc include/core/move/SpAttackMove.h src/core/move/moves/Thunder.cc include/core/move/moves/Thunder.h include/core/battle/Battle.h src/core/battle/Battle.cc include/core/buff/buffs/HexBuff.h src/core/buff/buffs/HexBuff.cc include/core/action/BufAction.h src/core/action/BufAction.cc include/core/move/BufMove.h src/core/move/BufMove.cc src/core/move/moves/Charge.cc include/core/move/moves/Charge.h include/core/buff/buffs/TypeActionBuff.h src/core/buff/buffs/TypeActionBuff.cc src/core/move/moves/RisingVoltage.cc include/core/move/moves/RisingVoltage.h src/core/pokemon/tools.cc src/core/common.cc)
 add_executable(client src/app/client/main.cc qml.qrc)
 add_executable(run_tests src/run_tests.cc tests/test_pokemon.cc tests/test_pokemoninstance.cc tests/test_battle.cc)
-add_executable(terminal_demo src/terminal_demo.cc include/pokemon/tools.h)
+add_executable(terminal_demo src/terminal_demo.cc include/core/pokemon/tools.h)
 add_executable(server src/app/server/main.cc)
 
 target_include_directories(
         libpokemon_core
         PUBLIC
-        "include"
+        "include/core"
 )
 target_link_libraries(libpokemon_core Qt5::Network)
 
@@ -39,6 +39,7 @@ target_link_libraries(client libpokemon_core)
 target_link_libraries(client Qt5::Widgets Qt5::Qml Qt5::Quick Qt5::Network)
 
 target_link_libraries(server libpokemon_core)
+target_link_libraries(server CONAN_PKG::nlohmann_json)
 target_link_libraries(server Qt5::Core Qt5::Network)
 
 add_test(test_all run_tests)

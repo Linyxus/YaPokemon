@@ -2,7 +2,7 @@
 // Created by Yichen Xu on 2020/9/1.
 //
 
-#include <common.h>
+#include <include/core/common.h>
 #include <cassert>
 
 double power2rate(uint power) {
