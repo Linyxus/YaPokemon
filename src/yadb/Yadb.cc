@@ -60,13 +60,13 @@ namespace yadb {
         }
     }
 
-    void Yadb::insert(json record) {
+    int Yadb::insert(json record) {
         int count = _data[_table_name.toStdString()]["_count"].get<int>();
         record["_id"] = count;
         _data[_table_name.toStdString()]["_data"].push_back(std::move(record));
         count += 1;
         _data[_table_name.toStdString()]["_count"] = count;
-        sync();
+        return count - 1;
     }
 
     QVector<json> Yadb::all() {
@@ -92,6 +92,14 @@ namespace yadb {
 
     void Yadb::update(const json &j) {
         return set().update(j);
+    }
+
+    int Yadb::count() {
+        return set().count();
+    }
+
+    bool Yadb::exists(const shared_ptr<Predicate> &pred) {
+        return set().exists(pred);
     }
 
 }

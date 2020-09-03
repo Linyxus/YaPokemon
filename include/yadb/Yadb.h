@@ -23,13 +23,15 @@ namespace yadb {
         void sync() const;
 
         void table(const QString& table_name);
-        void insert(json record);
+        int insert(json record);
 
         Subset set();
         QVector<json> all();
         json get();
         Subset where(const shared_ptr<Predicate> &pred);
         void update(const json &j);
+        int count();
+        bool exists(const shared_ptr<Predicate> &pred);
 
         inline json raw_json() const { return _data; }
     private:

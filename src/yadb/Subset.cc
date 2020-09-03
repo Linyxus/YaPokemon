@@ -58,3 +58,11 @@ void yadb::Subset::update(const json& obj) {
     }
 }
 
+int yadb::Subset::count() const {
+    return _indices.size();
+}
+
+bool yadb::Subset::exists(const shared_ptr<Predicate> &pred) {
+    return where(pred).count() > 0;
+}
+

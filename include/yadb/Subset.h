@@ -108,6 +108,8 @@ namespace yadb {
         Subset where(const shared_ptr<Predicate> &pred);
         static json field_of(const json &obj, QVector<QString> f);
         void update(const json& obj);
+        int count() const;
+        bool exists(const shared_ptr<Predicate> &pred);
 
     private:
         QString _table_name;
