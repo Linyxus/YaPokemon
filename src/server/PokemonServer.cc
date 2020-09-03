@@ -258,7 +258,7 @@ QString PokemonServer::check_req_auth(json payload) {
 }
 
 json PokemonServer::compose_pokemon_list() {
-    return _db.table("pokemons").raw_json()["pokemons"];
+    return _db.table("pokemons").raw_json()["pokemons"]["_data"];
 }
 
 QByteArray PokemonServer::pokemon_list_handler(const json &payload) {
