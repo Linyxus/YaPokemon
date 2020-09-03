@@ -73,6 +73,7 @@ QByteArray PokemonServer::user_register_handler(json payload) {
         return compose_error_resp("密码为空");
     }
     if (user_register(username, password)) {
+        pulse(username);
         return compose_succ_resp();
     } else {
         return compose_error_resp("用户名重复");
@@ -94,6 +95,12 @@ void PokemonServer::message_handler() {
         }
         if (msg_type == "user::check_auth") {
             resp = user_check_auth_handler(msg["payload"]);
+        }
+        if (msg_type == "user::list") {
+            resp = user_list_handler(msg["payload"]);
+        }
+        if (msg_type == "pokemon::list") {
+            resp = pokemon_list_handler(msg["payload"]);
         }
         int status = _socket.writeDatagram(resp, dgram.senderAddress(), dgram.senderPort());
         if (status == -1) {
@@ -133,6 +140,7 @@ QByteArray PokemonServer::user_auth_handler(json payload) {
     if (!verify_user(QString::fromStdString(u), QString::fromStdString(p))) {
         return compose_error_resp("用户登录信息错误");
     }
+    pulse(QString::fromStdString(u));  // log user activity
     auto token = jwt_for_user(QString::fromStdString(u));
     auto s = token.toStdString();
     return compose_succ_resp(
@@ -176,5 +184,90 @@ QByteArray PokemonServer::user_check_auth_handler(json payload) {
                 {{"username", maybe_user.toStdString()}}
         );
     }
+}
+
+void PokemonServer::pulse(const QString &username) {
+    int now = get_timestamp();
+    auto u = username.toStdString();
+    assert(_db.table("users").exists(_x_["username"] == u));
+    if (!_db.table("pulse").exists(_x_["username"] == u)) {
+        _db.insert(
+                {{"last_active", now}, {"username", u}}
+        );
+    } else {
+        _db.where(_x_["username"] == u).update(
+                {{"last_active", now}}
+        );
+    }
+    _db.sync();
+}
+
+int PokemonServer::inactive_duration(const QString &username) {
+    auto u = username.toStdString();
+    int now = get_timestamp();
+    assert(_db.table("pulse").exists(_x_["username"] == u));
+    auto last_active = _db.where(_x_["username"] == u).get()["last_active"].get<int>();
+
+    return now - last_active;
+}
+
+json PokemonServer::compose_user_json(const QString &username) {
+    auto u = username.toStdString();
+    assert(_db.table("users").exists(_x_["username"] == u));
+    json user = _db.where(_x_["username"] == u).get();
+    json ret;
+    ret["username"] = u;
+    ret["pokemons"] = user["pokemons"];
+    ret["inactive_duration"] = inactive_duration(username);
+
+    return ret;
+}
+
+json PokemonServer::compose_user_list() {
+    QVector<QString> usernames;
+    for (auto user : _db.table("users").all()) {
+        usernames.append(QString::fromStdString(user["username"].get<string>()));
+    }
+    json ret = json::array();
+    for (const auto& username : usernames) {
+        ret.push_back(compose_user_json(username));
+    }
+
+    return ret;
+}
+
+QByteArray PokemonServer::user_list_handler(const json& payload) {
+    auto username = check_req_auth(payload);
+    if (username.isEmpty()) {
+        return compose_error_resp("需要认证");
+    }
+    auto ulist = compose_user_list();
+    auto resp = compose_succ_resp({{"users", ulist}});
+    return resp;
+}
+
+QString PokemonServer::check_req_auth(json payload) {
+    if (!payload.contains("token")) return {};
+    auto token = payload["token"].get<string>();
+
+    auto u = get_user(QByteArray::fromStdString(token));
+    if (!u.isEmpty()) {
+        pulse(u);
+    }
+    return u;
+}
+
+json PokemonServer::compose_pokemon_list() {
+    return _db.table("pokemons").raw_json()["pokemons"];
+}
+
+QByteArray PokemonServer::pokemon_list_handler(const json &payload) {
+    auto username = check_req_auth(payload);
+    if (username.isEmpty()) {
+        return compose_error_resp("需要认证");
+    }
+    auto plist = compose_pokemon_list();
+    auto resp = compose_succ_resp({{"pokemons", plist}});
+    return resp;
 }
 

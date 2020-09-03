@@ -22,7 +22,7 @@ namespace yadb {
         [[nodiscard]] QString path() const;
         void sync() const;
 
-        void table(const QString& table_name);
+        Yadb &table(const QString& table_name);
         int insert(json record);
 
         Subset set();

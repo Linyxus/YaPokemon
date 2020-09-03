@@ -52,12 +52,13 @@ namespace yadb {
         write_file(_path, data.toUtf8());
     }
 
-    void Yadb::table(const QString& table_name) {
+    Yadb &Yadb::table(const QString& table_name) {
         _table_name = table_name;
         if (!_data.contains(_table_name.toStdString())) {
             _data[_table_name.toStdString()]["_count"] = 0;
             _data[_table_name.toStdString()]["_data"] = json::array();
         }
+        return *this;
     }
 
     int Yadb::insert(json record) {
