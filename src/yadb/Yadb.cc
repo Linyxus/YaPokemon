@@ -82,5 +82,17 @@ namespace yadb {
         return Subset(&_data, _table_name, indices);
     }
 
+    json Yadb::get() {
+        return set().get();
+    }
+
+    Subset Yadb::where(const shared_ptr<Predicate> &pred) {
+        return set().where(pred);
+    }
+
+    void Yadb::update(const json &j) {
+        return set().update(j);
+    }
+
 }
 

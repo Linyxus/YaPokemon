@@ -27,6 +27,9 @@ namespace yadb {
 
         Subset set();
         QVector<json> all();
+        json get();
+        Subset where(const shared_ptr<Predicate> &pred);
+        void update(const json &j);
 
         inline json raw_json() const { return _data; }
     private:

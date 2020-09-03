@@ -13,7 +13,7 @@ using namespace std;
 
 namespace yadb {
 
-    enum OpType { OpEq };
+    enum OpType { OpEq, OpLe, OpLt, OpGe, OpGt, OpNeq };
 
     struct Selector {
         QVector<QString> fields;
@@ -45,6 +45,21 @@ namespace yadb {
             if (_op_type == OpEq) {
                 return x == _rval;
             }
+            if (_op_type == OpNeq) {
+                return x != _rval;
+            }
+            if (_op_type == OpGe) {
+                return x >= _rval;
+            }
+            if (_op_type == OpGt) {
+                return x > _rval;
+            }
+            if (_op_type == OpLe) {
+                return x <= _rval;
+            }
+            if (_op_type == OpLt) {
+                return x < _rval;
+            }
             return true;
         }
 
@@ -56,6 +71,31 @@ namespace yadb {
     template<typename T>
     shared_ptr<Predicate> operator==(const Selector &selector, const T &val) {
         return make_shared<PredicateOf<T>>(OpEq, selector, val);
+    }
+
+    template<typename T>
+    shared_ptr<Predicate> operator!=(const Selector &selector, const T &val) {
+        return make_shared<PredicateOf<T>>(OpNeq, selector, val);
+    }
+
+    template<typename T>
+    shared_ptr<Predicate> operator>(const Selector &selector, const T &val) {
+        return make_shared<PredicateOf<T>>(OpGt, selector, val);
+    }
+
+    template<typename T>
+    shared_ptr<Predicate> operator>=(const Selector &selector, const T &val) {
+        return make_shared<PredicateOf<T>>(OpGe, selector, val);
+    }
+
+    template<typename T>
+    shared_ptr<Predicate> operator<(const Selector &selector, const T &val) {
+        return make_shared<PredicateOf<T>>(OpLt, selector, val);
+    }
+
+    template<typename T>
+    shared_ptr<Predicate> operator<=(const Selector &selector, const T &val) {
+        return make_shared<PredicateOf<T>>(OpLe, selector, val);
     }
 
     const Selector _x_({});
