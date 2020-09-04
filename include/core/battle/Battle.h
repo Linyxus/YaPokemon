@@ -36,6 +36,8 @@ public:
     shared_ptr<PokemonInstance> left() const;
     shared_ptr<PokemonInstance> right() const;
     uint turn_count() const;
+
+    static int get_exp(int this_level, int that_level);
 private:
     shared_ptr<PokemonInstance> _left;
     shared_ptr<PokemonInstance> _right;

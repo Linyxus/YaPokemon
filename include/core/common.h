@@ -20,6 +20,8 @@ double defense2rate(uint d);
 
 double speed2miss(uint d);
 
+double speed2critical(uint d);
+
 bool sample_miss(double miss_rate);
 
 #endif //POKEMON_CORE_COMMON_H

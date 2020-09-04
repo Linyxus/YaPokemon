@@ -116,3 +116,11 @@ BattleRound Battle::proceed() {
 uint Battle::turn_count() const {
     return _turn_count;
 }
+
+int Battle::get_exp(int this_level, int that_level) {
+    if (that_level >= this_level) {
+        return 40 + (that_level - this_level) * 10;
+    }
+    int exp = (4 - (this_level - that_level)) * 10;
+    return exp < 10 ? 10 : exp;
+}

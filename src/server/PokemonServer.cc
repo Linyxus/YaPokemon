@@ -8,6 +8,9 @@
 #include <utility>
 #include <QNetworkDatagram>
 #include <QDateTime>
+#include <pokemon/pokemons/eevee.h>
+#include <pokemon/pokemons/pikachu.h>
+#include <move/Move.h>
 
 using yadb::_x_;
 
@@ -102,6 +105,12 @@ void PokemonServer::message_handler() {
         if (msg_type == "pokemon::list") {
             resp = pokemon_list_handler(msg["payload"]);
         }
+        if (msg_type == "battle::exe") {
+            resp = battle_exe_handler(msg["payload"]);
+        }
+        if (msg_type == "battle::real") {
+            resp = battle_real_handler(msg["payload"]);
+        }
         int status = _socket.writeDatagram(resp, dgram.senderAddress(), dgram.senderPort());
         if (status == -1) {
             qDebug() << "Fail to send response: udp error";
@@ -152,7 +161,7 @@ int PokemonServer::create_pokemon(PokemonId pid) {
     _db.table("pokemons");
     json rec;
     rec["pokemon_id"] = pid;
-    rec["exp"] = 0;
+    rec["exp"] = 50;
     auto id = _db.insert(rec);
     _db.sync();
     return id;
@@ -192,7 +201,8 @@ void PokemonServer::pulse(const QString &username) {
     assert(_db.table("users").exists(_x_["username"] == u));
     if (!_db.table("pulse").exists(_x_["username"] == u)) {
         _db.insert(
-                {{"last_active", now}, {"username", u}}
+                {{"last_active", now},
+                 {"username",    u}}
         );
     } else {
         _db.where(_x_["username"] == u).update(
@@ -229,14 +239,14 @@ json PokemonServer::compose_user_list() {
         usernames.append(QString::fromStdString(user["username"].get<string>()));
     }
     json ret = json::array();
-    for (const auto& username : usernames) {
+    for (const auto &username : usernames) {
         ret.push_back(compose_user_json(username));
     }
 
     return ret;
 }
 
-QByteArray PokemonServer::user_list_handler(const json& payload) {
+QByteArray PokemonServer::user_list_handler(const json &payload) {
     auto username = check_req_auth(payload);
     if (username.isEmpty()) {
         return compose_error_resp("需要认证");
@@ -271,3 +281,201 @@ QByteArray PokemonServer::pokemon_list_handler(const json &payload) {
     return resp;
 }
 
+BattleResult PokemonServer::run_battle(int pokemon_id, int boss_id, int boss_level) {
+    assert(_db.table("pokemons").exists(_x_["_id"] == pokemon_id));
+    auto pokemon = PokemonServer::pokemon_from_json(_db.table("pokemons").where(_x_["id"] == pokemon_id).get());
+    auto boss = PokemonServer::pokemon_from_info(_boss[boss_id], boss_level * 50);
+
+    return BattleHistory::run_battle(pokemon, boss);
+}
+
+shared_ptr<Pokemon> PokemonServer::pokemon_from_json(json obj) {
+    auto pid = static_cast<PokemonId>(obj["pokemon_id"].get<int>());
+    int exp = obj["exp"].get<int>();
+    return PokemonServer::pokemon_from_info(pid, exp);
+}
+
+shared_ptr<Pokemon> PokemonServer::pokemon_from_info(PokemonId pid, int exp) {
+    if (pid == PokemonEevee) {
+        auto ret = shared_ptr<PokemonOf<Eevee>>();
+        ret->learn(exp);
+        return ret;
+    }
+    if (pid == PokemonPikachu) {
+        auto ret = shared_ptr<PokemonOf<Pikachu>>();
+        ret->learn(exp);
+        return ret;
+    }
+
+    return nullptr;
+}
+
+BattleResult PokemonServer::exe_battle(int pokemon_id, int boss_id) {
+    assert(_db.table("pokemons").exists(_x_["_id"] == pokemon_id));
+    auto pokemon = PokemonServer::pokemon_from_json(_db.table("pokemons").where(_x_["id"] == pokemon_id).get());
+    return run_battle(pokemon_id, boss_id, pokemon->level());
+}
+
+BattleResult PokemonServer::real_battle(int pokemon_id, int boss_id) {
+    return run_battle(pokemon_id, boss_id, 15);
+}
+
+json PokemonServer::compose_pokemon_instance(const shared_ptr<PokemonInstance> &instance) {
+    json ret;
+    ret["name"] = instance->pokemon()->name();
+    ret["level"] = instance->pokemon()->level();
+    ret["hp"] = instance->current().hp;
+
+    vector<string> buffs = {};
+    for (const auto &b : instance->buff()) {
+        buffs.push_back(b->name());
+    }
+    ret["buff"] = buffs;
+
+    return ret;
+}
+
+json PokemonServer::compose_battle_round(const BattleRound &round) {
+    json ret;
+    ret["turn"] = round.turn == LeftTurn ? "left" : "right";
+    ret["miss"] = round.miss;
+    if (!round.miss) {
+        ret["move"] = round.move->name();
+    }
+
+    return ret;
+}
+
+json PokemonServer::compose_battle_result(const BattleResult &result) {
+    json ret;
+    ret["winner"] = result.first == LeftWin ? "left" : "right";
+
+    vector<json> history = {};
+    for (const auto &step : result.second) {
+        history.push_back(compose_battle_step(step));
+    }
+    ret["history"] = history;
+
+    return ret;
+}
+
+json PokemonServer::compose_battle_step(const BattleStep &step) {
+    json ret;
+    ret["round"] = compose_battle_round(step.round);
+    ret["left"] = compose_pokemon_instance(step.left);
+    ret["right"] = compose_pokemon_instance(step.right);
+
+    return ret;
+}
+
+bool PokemonServer::remove_user_pokemon(const QString &username, int id) {
+    auto pokemons = _db.table("users")
+                       .where(_x_["username"] == username.toStdString())
+                       .get()["pokemons"]
+                       .get<std::vector<int>>();
+    bool found = false;
+    vector<int> p = {};
+    for (auto i : pokemons) {
+        if (i == id) {
+            found = true;
+        } else {
+            p.push_back(i);
+        }
+    }
+
+    if (!found) {
+        return false;
+    }
+
+    _db.table("users")
+       .where(_x_["username"] == username.toStdString())
+       .update({{"pokemons", p}});
+
+    return true;
+}
+
+QByteArray PokemonServer::battle_exe_handler(const json &payload) {
+    auto username = check_req_auth(payload);
+    if (username.isEmpty()) {
+        return compose_error_resp("需要认证");
+    }
+
+    auto pid = payload["pid"].get<int>();
+    auto boss_id = payload["boss_id"].get<int>();
+
+    if (!verify_user_pokemon(username, pid)) {
+        return compose_error_resp("用户无此精灵");
+    }
+
+    auto res = exe_battle(pid, boss_id);
+    if (res.first == LeftWin) {
+        pokemon_learn(pid, Battle::get_exp(1, 1));
+    }
+
+    auto result = compose_battle_result(res);
+    return compose_succ_resp({{"result", result}});
+}
+
+QByteArray PokemonServer::battle_real_handler(const json &payload) {
+    auto username = check_req_auth(payload);
+    if (username.isEmpty()) {
+        return compose_error_resp("需要认证");
+    }
+
+    auto pid = payload["pid"].get<int>();
+    auto boss_id = payload["boss_id"].get<int>();
+
+    if (!verify_user_pokemon(username, pid)) {
+        return compose_error_resp("用户无此精灵");
+    }
+
+    auto res = real_battle(pid, boss_id);
+    if (res.first == LeftWin) {
+        pokemon_learn(pid, Battle::get_exp(get_pokemon_by_id(pid)->level(), 15));
+        auto id = create_pokemon(_boss[boss_id]);
+        add_user_pokemon(username, id);
+    } else {
+        remove_user_pokemon(username, pid);
+    }
+
+    auto result = compose_battle_result(res);
+    return compose_succ_resp({{"result", result}});
+}
+
+bool PokemonServer::verify_user_pokemon(const QString &username, int pid) {
+    auto pokemons = _db.table("users")
+                       .where(_x_["username"] == username.toStdString())
+                       .get()["pokemons"]
+                       .get<std::vector<int>>();
+    for (auto i : pokemons) {
+        if (i == pid) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void PokemonServer::pokemon_learn(int pid, int exp) {
+    auto q = _db.table("pokemons").where(_x_["_id"] == pid);
+    assert(q.count() == 1);
+    auto pokemon = q.get();
+    auto old_exp = pokemon["exp"].get<int>();
+
+    _db.where(_x_["_id"] == pid).update({{"exp", old_exp + exp}});
+}
+
+shared_ptr<Pokemon> PokemonServer::get_pokemon_by_id(int pid) {
+    auto j = _db.table("pokemons")
+                .where(_x_["_id"] == pid)
+                .get();
+    return pokemon_from_json(j);
+}
+
+void PokemonServer::add_user_pokemon(const QString &username, int pid) {
+    auto u = username.toStdString();
+    auto pokemons = _db.table("users")
+                       .where(_x_["username"] == username)
+                       .get()["pokemons"].get<vector<int>>();
+    pokemons.push_back(pid);
+    _db.where(_x_["username"] == username).update({{"pokemons", pokemons}});
+}

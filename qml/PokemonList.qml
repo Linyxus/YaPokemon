@@ -19,6 +19,17 @@ ListView {
 
         mouseArea.onClicked: {
             console.log(modelData.name)
+            contextMenu.open()
+        }
+
+        Menu {
+            id: contextMenu
+            title: "精灵操作"
+            width: parent.width - 20
+            y: parent.height
+            x: 10
+            MenuItem { text: "丢弃精灵" }
+            MenuItem { text: "使用经验糖果" }
         }
     }
 }

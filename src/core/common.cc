@@ -17,6 +17,12 @@ double speed2miss(uint d) {
     return -1 / (1 + d / 100.0) + 1;
 }
 
+double speed2critical(uint d) {
+    // TODO design speed -> critical rate function
+    // pick up here!
+    return 0;
+}
+
 uint ensure_range(int x, uint low, uint high) {
     x = x > low ? x : low;
     x = x < high ? x : high;

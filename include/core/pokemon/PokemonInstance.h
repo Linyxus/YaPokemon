@@ -34,6 +34,8 @@ public:
 
     virtual vector<shared_ptr<Buff>> buff() const = 0;
     virtual void update_buff() = 0;
+
+    virtual shared_ptr<PokemonInstance> clone() const = 0;
 };
 
 template<typename T>
@@ -52,6 +54,8 @@ public:
     vector<shared_ptr<Buff>> buff() const override;
 
     void update_buff() override;
+
+    shared_ptr<PokemonInstance> clone() const override;
 
 private:
     PokemonOf<T> _pokemon;
@@ -120,6 +124,12 @@ void PokemonInstanceOf<T>::update_buff() {
         }
     }
     _buff = new_buff;
+}
+
+template<typename T>
+shared_ptr<PokemonInstance> PokemonInstanceOf<T>::clone() const {
+    shared_ptr<PokemonInstanceOf<T>> ret = make_shared<PokemonInstanceOf<T>>(*this);
+    return ret;
 }
 
 template<typename T>
