@@ -86,13 +86,14 @@ QVector<shared_ptr<Pokemon>> PokemonClient::get_pokemons() {
 
 PokemonUser user_from_json(json obj, const QVector<shared_ptr<Pokemon>> &all_pokemons) {
     QString username = QString::fromStdString(obj["username"].get<string>());
+    int inactive_duration = obj["inactive_duration"].get<int>();
     QVector<shared_ptr<Pokemon>> pokemons{};
     auto pokemon_indices = obj["pokemons"].get<vector<int>>();
     for (auto i : pokemon_indices) {
         pokemons.push_back(all_pokemons[i]);
     }
 
-    return {username, pokemons};
+    return {username, pokemons, inactive_duration};
 }
 
 QVector<PokemonUser> PokemonClient::get_users() {

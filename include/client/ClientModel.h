@@ -15,12 +15,15 @@ class UserModel : public QObject {
     Q_OBJECT
     Q_PROPERTY(QString username MEMBER m_username NOTIFY usernameChanged)
     Q_PROPERTY(int pokemonCount MEMBER m_pokemon_count NOTIFY pokemonCountChanged)
+    Q_PROPERTY(bool online MEMBER m_online NOTIFY onlineChanged)
 public:
     QString m_username;
     int m_pokemon_count;
+    bool m_online;
 Q_SIGNALS:
     void usernameChanged();
     void pokemonCountChanged();
+    void onlineChanged();
 };
 
 class PokemonModel : public QObject {

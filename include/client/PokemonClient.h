@@ -14,6 +14,7 @@ using nlohmann::json;
 struct PokemonUser {
     QString username;
     QVector<shared_ptr<Pokemon>> pokemons;
+    int inactive_duration;
 };
 
 class PokemonClient : public QObject {

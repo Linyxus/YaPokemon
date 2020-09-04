@@ -10,6 +10,7 @@ ListView {
     delegate: UserItem {
         username: modelData.username
         count: modelData.pokemonCount
+        online: modelData.online
 
         mouseArea.onClicked: {
             client_model.setViewUser(index)

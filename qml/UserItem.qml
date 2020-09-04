@@ -11,6 +11,7 @@ Rectangle {
     radius: height / 2
     property string username: "linyxus"
     property int count: 4
+    property bool online: true
 
     property alias mouseArea: mouseArea
 
@@ -22,6 +23,32 @@ Rectangle {
         anchors.leftMargin: 20
         anchors.verticalCenter: parent.verticalCenter
         font.pointSize: 30
+    }
+
+    Rectangle {
+        id: onlineIndicator
+        anchors.left: nameLabel.right
+        anchors.leftMargin: 10
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.verticalCenterOffset: 3
+
+        height: 8
+        width: height
+        radius: height / 2
+        color: parent.online ? "green" : "grey"
+    }
+
+    Rectangle {
+        id: onlineLabel
+        anchors.left: onlineIndicator.right
+        width: 50
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.verticalCenterOffset: 3
+
+        Text {
+            text: parent.parent.online ? "online" : "offline"
+            anchors.centerIn: parent
+        }
     }
 
     Text {

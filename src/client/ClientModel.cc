@@ -22,6 +22,7 @@ QVariant ClientModel::getUsers() {
         auto u = new UserModel;
         u->m_username = user.username;
         u->m_pokemon_count = user.pokemons.count();
+        u->m_online = user.inactive_duration < 1000 * 60 * 5;
 
         ret << u;
     }
