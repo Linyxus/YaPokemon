@@ -111,6 +111,9 @@ void PokemonServer::message_handler() {
         if (msg_type == "battle::real") {
             resp = battle_real_handler(msg["payload"]);
         }
+        if (msg_type == "battle::list_boss") {
+            resp = battle_list_boss_handler(msg["payload"]);
+        }
         int status = _socket.writeDatagram(resp, dgram.senderAddress(), dgram.senderPort());
         if (status == -1) {
             qDebug() << "Fail to send response: udp error";
@@ -283,7 +286,7 @@ QByteArray PokemonServer::pokemon_list_handler(const json &payload) {
 
 BattleResult PokemonServer::run_battle(int pokemon_id, int boss_id, int boss_level) {
     assert(_db.table("pokemons").exists(_x_["_id"] == pokemon_id));
-    auto pokemon = PokemonServer::pokemon_from_json(_db.table("pokemons").where(_x_["id"] == pokemon_id).get());
+    auto pokemon = PokemonServer::pokemon_from_json(_db.table("pokemons").where(_x_["_id"] == pokemon_id).get());
     auto boss = PokemonServer::pokemon_from_info(_boss[boss_id], boss_level * 50);
 
     return BattleHistory::run_battle(pokemon, boss);
@@ -297,12 +300,12 @@ shared_ptr<Pokemon> PokemonServer::pokemon_from_json(json obj) {
 
 shared_ptr<Pokemon> PokemonServer::pokemon_from_info(PokemonId pid, int exp) {
     if (pid == PokemonEevee) {
-        auto ret = shared_ptr<PokemonOf<Eevee>>();
+        auto ret = make_shared<PokemonOf<Eevee>>();
         ret->learn(exp);
         return ret;
     }
     if (pid == PokemonPikachu) {
-        auto ret = shared_ptr<PokemonOf<Pikachu>>();
+        auto ret = make_shared<PokemonOf<Pikachu>>();
         ret->learn(exp);
         return ret;
     }
@@ -312,7 +315,7 @@ shared_ptr<Pokemon> PokemonServer::pokemon_from_info(PokemonId pid, int exp) {
 
 BattleResult PokemonServer::exe_battle(int pokemon_id, int boss_id) {
     assert(_db.table("pokemons").exists(_x_["_id"] == pokemon_id));
-    auto pokemon = PokemonServer::pokemon_from_json(_db.table("pokemons").where(_x_["id"] == pokemon_id).get());
+    auto pokemon = PokemonServer::pokemon_from_json(_db.table("pokemons").where(_x_["_id"] == pokemon_id).get());
     return run_battle(pokemon_id, boss_id, pokemon->level());
 }
 
@@ -339,7 +342,7 @@ json PokemonServer::compose_battle_round(const BattleRound &round) {
     json ret;
     ret["turn"] = round.turn == LeftTurn ? "left" : "right";
     ret["miss"] = round.miss;
-    if (!round.miss) {
+    if (!round.miss && round.move) {
         ret["move"] = round.move->name();
     }
 
@@ -436,6 +439,14 @@ QByteArray PokemonServer::battle_real_handler(const json &payload) {
         add_user_pokemon(username, id);
     } else {
         remove_user_pokemon(username, pid);
+
+        auto pokemons = _db.table("users")
+                           .where(_x_["username"] == username.toStdString())
+                           .get()["pokemons"].get<vector<int>>();
+        if (pokemons.empty()) {
+            auto id = create_pokemon(rand_pokemon());
+            add_user_pokemon(username, id);
+        }
     }
 
     auto result = compose_battle_result(res);
@@ -474,8 +485,27 @@ shared_ptr<Pokemon> PokemonServer::get_pokemon_by_id(int pid) {
 void PokemonServer::add_user_pokemon(const QString &username, int pid) {
     auto u = username.toStdString();
     auto pokemons = _db.table("users")
-                       .where(_x_["username"] == username)
+                       .where(_x_["username"] == u)
                        .get()["pokemons"].get<vector<int>>();
     pokemons.push_back(pid);
-    _db.where(_x_["username"] == username).update({{"pokemons", pokemons}});
+    _db.where(_x_["username"] == u).update({{"pokemons", pokemons}});
 }
+
+json PokemonServer::compose_boss_list() {
+    json ret = json::array();
+    for (auto pid : _boss) {
+        ret.push_back(pokemon_from_info(pid, 0)->name());
+    }
+    return ret;
+}
+
+QByteArray PokemonServer::battle_list_boss_handler(const json &payload) {
+    auto username = check_req_auth(payload);
+    if (username.isEmpty()) {
+        return compose_error_resp("需要认证");
+    }
+
+    auto blist = compose_boss_list();
+    return compose_succ_resp({{"boss", blist}});
+}
+

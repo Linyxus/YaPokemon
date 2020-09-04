@@ -5,7 +5,13 @@
 #include <include/server/BattleHistory.h>
 #include <utility>
 
-BattleHistory::BattleHistory(Battle battle) : _battle(std::move(battle)), _history {}, _result {Ongoing} {}
+BattleHistory::BattleHistory(Battle battle) : _battle(std::move(battle)), _history {}, _result {Ongoing} {
+    BattleStep initial;
+    initial.round = {};
+    initial.left = _battle.left()->clone();
+    initial.right = _battle.right()->clone();
+    _history << initial;
+}
 
 const Battle &BattleHistory::battle() const {
     return _battle;

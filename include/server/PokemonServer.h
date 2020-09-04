@@ -46,6 +46,7 @@ private:
     json compose_user_json(const QString &username);
     json compose_user_list();
     json compose_pokemon_list();
+    json compose_boss_list();
     static json compose_pokemon_instance(const shared_ptr<PokemonInstance> &instance);
     static json compose_battle_round(const BattleRound &round);
     static json compose_battle_step(const BattleStep &step);
@@ -58,6 +59,7 @@ private:
     QByteArray pokemon_list_handler(const json& payload);
     QByteArray battle_exe_handler(const json& payload);
     QByteArray battle_real_handler(const json& payload);
+    QByteArray battle_list_boss_handler(const json& payload);
     void message_handler();
 
     yadb::Yadb _db;
