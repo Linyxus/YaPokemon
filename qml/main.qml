@@ -11,6 +11,7 @@ ApplicationWindow {
     StackView {
         id: stackView
         initialItem: welcomeView
+//        initialItem: profileView
         anchors.fill: parent
 
         pushEnter: Transition {
@@ -86,37 +87,21 @@ ApplicationWindow {
         }
     }
 
-    WelcomeView {
-        id: welcomeView
-        stack: stackView
-        visible: false
+    Connections {
+        target: client_model
 
-        startBtnMouseArea.onClicked: {
-            stackView.push(loginView)
+        function onPagePushed(page) {
+            stackView.push(page)
+
         }
-    }
 
-    GameView {
-        id: gameView
-        stack: stackView
-        visible: false
-
-        backBtnMouseArea.onClicked: {
+        function onPagePoped() {
             stackView.pop()
         }
     }
 
-    LoginView {
-        id: loginView
-        visible: false
-
-        submitBtnMouseArea.onClicked: {
-            stackView.push(mainView)
-        }
-    }
-
-    MainView {
-        id: mainView
+    WelcomeView {
+        id: welcomeView
         visible: false
     }
 }

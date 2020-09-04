@@ -115,3 +115,21 @@ QVector<PokemonUser> PokemonClient::get_users() {
     }
 }
 
+QString PokemonClient::signup(const QString &username, const QString &password) {
+    auto u = username.toStdString();
+    auto p = password.toStdString();
+    json msg = compose_msg("user::register", {{"username", u},
+                                          {"password", p}});
+    json resp = request(msg);
+    auto status = resp["status"].get<string>();
+    if (status == "okay") {
+        return {};
+    } else {
+        return QString::fromStdString(resp["error_msg"].get<string>());
+    }
+}
+
+const QString &PokemonClient::username() const {
+    return _username;
+}
+

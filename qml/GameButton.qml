@@ -12,7 +12,6 @@ Rectangle {
 
     property alias text: buttonText.text
     property alias mouseArea: mouseArea
-    property StackView stack
 
     Text {
         id: buttonText

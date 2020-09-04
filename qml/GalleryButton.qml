@@ -8,6 +8,7 @@ Rectangle {
 
     property alias imgSrc: image.source
     property alias text: label.text
+    property alias mouseArea: mouseArea
 
     Image {
         id: image

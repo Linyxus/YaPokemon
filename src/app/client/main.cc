@@ -1,21 +1,17 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
+#include <QObject>
+#include <QString>
+
 #include <include/client/PokemonClient.h>
+#include <include/client/ClientModel.h>
 
 int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     QGuiApplication app(argc, argv);
-    PokemonClient client(&app, QHostAddress::LocalHost, 12345);
-    client.auth("xyc", "xycxyc");
-    auto users = client.get_users();
-    for (auto user : users) {
-        qDebug() << user.username;
-        for (auto pokemon : user.pokemons) {
-            qDebug() << pokemon->temp()->name().c_str() << pokemon->level();
-        }
-    }
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
@@ -25,6 +21,9 @@ int main(int argc, char *argv[])
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
     engine.load(url);
+
+    ClientModel model(QHostAddress::LocalHost, 12345, &app);
+    engine.rootContext()->setContextProperty("client_model", &model);
 
     return app.exec();
 }

@@ -12,6 +12,15 @@
         <file>qml/MainView.qml</file>
         <file>qml/WelcomeView.qml</file>
         <file>qml/GalleryButton.qml</file>
+        <file>qml/UsersView.qml</file>
+        <file>qml/UsersList.qml</file>
+        <file>qml/UserItem.qml</file>
+        <file>qml/PokemonImage.qml</file>
+        <file>qml/PokemonItem.qml</file>
+        <file>qml/PokemonList.qml</file>
+        <file>qml/UserProfileView.qml</file>
+        <file>static/伊布.png</file>
+        <file>static/皮卡丘.png</file>
     </qresource>
     <qresource prefix="/static"/>
     <qresource lang="zh-cn" prefix="/static"/>

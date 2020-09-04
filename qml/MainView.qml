@@ -5,12 +5,18 @@ Rectangle {
     id: root
 
     anchors.fill: parent
+    property alias usersBtnMouseArea: usersBtn.mouseArea
+    property alias battleBtnMouseArea: battleBtn.mouseArea
 
     GalleryButton {
         id: usersBtn
 
         anchors.top: parent.top
         anchors.left: parent.left
+
+        mouseArea.onClicked: {
+            client_model.pushPage("UsersView.qml")
+        }
     }
 
     GalleryButton {

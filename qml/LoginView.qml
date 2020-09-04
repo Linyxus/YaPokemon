@@ -25,6 +25,9 @@ Rectangle {
         anchors.horizontalCenter: banner.horizontalCenter
 
         width: 300
+
+        property string value: ""
+        onTextChanged: value = text
     }
 
     TextField {
@@ -38,6 +41,9 @@ Rectangle {
         anchors.horizontalCenter: banner.horizontalCenter
 
         width: 300
+
+        property string value: ""
+        onTextChanged: value = text
     }
 
     GameButton {
@@ -48,5 +54,24 @@ Rectangle {
         anchors.horizontalCenter: banner.horizontalCenter
 
         text: banner.isLogin ? "登录" : "注册"
+
+        mouseArea.onClicked: {
+            if (banner.isLogin) {
+                const msg = client_model.auth(userNameInput.value, passwordInput.value)
+                if (msg) {
+                    submitBtn.text = "密码错误"
+                } else {
+                    client_model.pushPage("MainView.qml")
+                }
+            } else {
+                const msg = client_model.signup(userNameInput.value, passwordInput.value)
+                if (msg) {
+                    submitBtn.text = msg
+                } else {
+                    submitBtn.text = "注册成功"
+                    banner.isLogin = true
+                }
+            }
+        }
     }
 }

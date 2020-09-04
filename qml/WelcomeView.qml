@@ -5,7 +5,6 @@ Rectangle {
     id: root
     anchors.fill: parent
     color: "white"
-    required property StackView stack
 
     property alias startBtnMouseArea: startBtn.mouseArea
 
@@ -18,10 +17,13 @@ Rectangle {
 
     GameButton {
         id: startBtn
-        stack: parent.stack
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 100
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.horizontalCenterOffset: 30
+
+        mouseArea.onClicked: {
+            client_model.pushPage('LoginView.qml')
+        }
     }
 }

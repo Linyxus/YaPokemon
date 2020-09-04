@@ -21,8 +21,11 @@ class PokemonClient : public QObject {
 public:
     PokemonClient(QObject *parent, QHostAddress address, quint16 port);
     QString auth(const QString &username, const QString &password);
+    QString signup(const QString &username, const QString &password);
     QVector<shared_ptr<Pokemon>> get_pokemons();
     QVector<PokemonUser> get_users();
+
+    const QString &username() const;
 
 private:
     json request(const json& msg);
