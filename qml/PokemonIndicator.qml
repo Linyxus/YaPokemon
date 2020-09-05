@@ -5,7 +5,8 @@ Rectangle {
     id: root
     property int maxHp: 30
     property int nowHp: 20
-    property bool isLeft: true
+    property string name: "皮卡丘"
+    property int level: 10
 
     Behavior on nowHp {
         NumberAnimation {
@@ -25,7 +26,7 @@ Rectangle {
             anchors.top: parent.top
             anchors.margins: 10
 
-            text: "皮卡丘"
+            text: root.name
             font.pointSize: 24
         }
 
@@ -34,7 +35,7 @@ Rectangle {
             anchors.leftMargin: 10
             anchors.bottom: parent.bottom
 
-            text: "12 级"
+            text: root.level + " 级"
             font.pointSize: 15
         }
 

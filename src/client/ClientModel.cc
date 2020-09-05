@@ -3,6 +3,7 @@
 //
 
 #include <include/client/ClientModel.h>
+#include <battle/Battle.h>
 
 void ClientModel::pushPage(const QString &page) {
     emit pagePushed(page);
@@ -147,7 +148,7 @@ void ClientModel::updateBossList() {
 
 void ClientModel::setBattlePokemon(int idx) {
     int pid = _client.get_my_pokemon_id(idx);
-    _battle_pokemon = idx;
+    _battle_pokemon = pid;
 }
 
 QObject *ClientModel::getBattleResult() {
@@ -193,9 +194,29 @@ QObject *ClientModel::getBattleResult() {
 
 void ClientModel::startExeBattle(int boss_id) {
     _battle_result = _client.battle_exe(_battle_pokemon, boss_id);
+    int exp = Battle::get_exp(_battle_result.history.initial.left.level, _battle_result.history.initial.right.level);
+    if (_battle_result.winner == "left") {
+        m_result_text = "恭喜你赢得了比赛！";
+        m_result_text += "\n获得经验";
+        m_result_text += QString::number(exp);
+    } else {
+        m_result_text = "你输了";
+    }
+    emit battleResultChanged();
+    emit resultTextChanged();
 }
 
 void ClientModel::startRealBattle(int boss_id) {
     _battle_result = _client.battle_real(_battle_pokemon, boss_id);
+    int exp = Battle::get_exp(_battle_result.history.initial.left.level, _battle_result.history.initial.right.level);
+    if (_battle_result.winner == "left") {
+        m_result_text = "你赢得了挑战赛\n获得了精灵" + _boss_list[boss_id];
+        m_result_text += "\n获得经验";
+        m_result_text += QString::number(exp);
+    } else {
+        m_result_text = "你输掉了挑战赛\n失去了精灵" + _battle_result.history.initial.left.name;
+    }
+    emit battleResultChanged();
+    emit resultTextChanged();
 }
 

@@ -119,7 +119,8 @@ Q_OBJECT
     Q_PROPERTY(int viewUser READ viewUser NOTIFY viewUserChanged)
     Q_PROPERTY(QList<QObject *> myPokemons READ getMyPokemons NOTIFY usersChanged)
     Q_PROPERTY(QStringList bossList READ getBossList NOTIFY bossListChanged)
-    Q_PROPERTY(QObject *battleResult GET getBattleResult NOTIFY battleResultChanged)
+    Q_PROPERTY(QObject* battleResult READ getBattleResult NOTIFY battleResultChanged)
+    Q_PROPERTY(QString resultText MEMBER m_result_text NOTIFY resultTextChanged)
 public:
     ClientModel(QHostAddress addr, quint16 port, QObject *parent = 0);
 
@@ -231,6 +232,11 @@ public:
      */
     QObject *getBattleResult();
 
+    /**
+     * Result text to be shown when the battle finishes.
+     */
+    QString m_result_text;
+
 Q_SIGNALS:
 
     void pagePushed(QString page);
@@ -244,6 +250,8 @@ Q_SIGNALS:
     void bossListChanged();
 
     void battleResultChanged();
+
+    void resultTextChanged();
 
 private:
     void fetch_users();

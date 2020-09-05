@@ -25,7 +25,8 @@
         <file>qml/BossList.qml</file>
         <file>qml/BattleView.qml</file>
         <file>qml/PokemonIndicator.qml</file>
+        <file>qml/ResultView.qml</file>
     </qresource>
     <qresource prefix="/static"/>
-    <qresource lang="zh-cn" prefix="/static"/>
+    <qresource prefix="/static" lang="zh-cn"/>
 </RCC>

@@ -8,6 +8,8 @@ ListView {
     anchors.fill: parent
     spacing: 5
     model: client_model.bossList
+    property int selectedBoss: 0
+    property bool isExe: true
 
     delegate: Rectangle {
         width: parent.width * 0.8
@@ -16,6 +18,7 @@ ListView {
         radius: height / 2
         anchors.horizontalCenter: parent.horizontalCenter
         property string bossName: modelData
+        property string bossId: index
 
         Menu {
             id: pokemonSelect
@@ -29,7 +32,13 @@ ListView {
                 delegate: MenuItem {
                     text: modelData.name + " " + modelData.level + "级"
                     onTriggered: {
-                        console.log("You selected user pokemon " + index)
+                        client_model.setBattlePokemon(index)
+                        if (isExe) {
+                            client_model.startExeBattle(root.selectedBoss)
+                        } else {
+                            client_model.startRealBattle(root.selectedBoss)
+                        }
+
                         client_model.pushPage("BattleView.qml")
                     }
                 }
@@ -106,6 +115,8 @@ ListView {
                 flat: true
 
                 onClicked: {
+                    root.selectedBoss = parent.parent.bossId
+                    isExe = false
                     pokemonSelect.open()
                 }
             }
@@ -119,6 +130,8 @@ ListView {
                 flat: true
 
                 onClicked: {
+                    root.selectedBoss = parent.parent.bossId
+                    isExe = true
                     pokemonSelect.open()
                 }
             }
