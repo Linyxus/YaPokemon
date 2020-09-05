@@ -21,6 +21,10 @@
         <file>qml/UserProfileView.qml</file>
         <file>static/伊布.png</file>
         <file>static/皮卡丘.png</file>
+        <file>qml/BossView.qml</file>
+        <file>qml/BossList.qml</file>
+        <file>qml/BattleView.qml</file>
+        <file>qml/PokemonIndicator.qml</file>
     </qresource>
     <qresource prefix="/static"/>
     <qresource lang="zh-cn" prefix="/static"/>

@@ -27,5 +27,7 @@ Rectangle {
 
         text: "挑战"
         imgSrc: "../static/pokemon_2.jpg"
+
+        mouseArea.onClicked: client_model.pushPage("BossView.qml")
     }
 }
