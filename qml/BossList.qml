@@ -1,16 +1,13 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
+import QtQml.Models 2.15
 
 ListView {
     id: root
 
     anchors.fill: parent
     spacing: 5
-    model: ListModel {
-        ListElement {}
-        ListElement {}
-        ListElement {}
-    }
+    model: client_model.bossList
 
     delegate: Rectangle {
         width: parent.width * 0.8
@@ -18,21 +15,27 @@ ListView {
         border.width: 2
         radius: height / 2
         anchors.horizontalCenter: parent.horizontalCenter
-        property string bossName: "皮卡丘"
+        property string bossName: modelData
 
         Menu {
             id: pokemonSelect
             width: parent.width - 20
             y: parent.height
             x: 10
-            MenuItem {
-                text: "皮卡丘 10级"
-                onClicked: {
-                    client_model.pushPage("BattleView.qml")
+
+            Instantiator {
+                id: pokemonSelectInstantiator
+                model: client_model.myPokemons
+                delegate: MenuItem {
+                    text: modelData.name + " " + modelData.level + "级"
+                    onTriggered: {
+                        console.log("You selected user pokemon " + index)
+                        client_model.pushPage("BattleView.qml")
+                    }
                 }
-            }
-            MenuItem {
-                text: "伊布 12级"
+
+                onObjectAdded: pokemonSelect.insertItem(index, object)
+                onObjectRemoved: pokemonSelect.removeItem(object)
             }
         }
 
@@ -68,7 +71,7 @@ ListView {
                 height: parent.height
                 width: parent.height
 
-                name: pokemonName
+                name: parent.parent.bossName
             }
 
             Rectangle {

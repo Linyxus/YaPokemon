@@ -33,6 +33,7 @@ QVariant ClientModel::getUsers() {
 ClientModel::ClientModel(QHostAddress addr, quint16 port, QObject *parent)
 : QObject(parent), _client(this, addr, port) {
     _users_valid = false;
+    _boss_list_valid = false;
     _current_view_user = 0;
 }
 
@@ -99,5 +100,48 @@ int ClientModel::getAuthedUser() {
     }
 
     return 0;
+}
+
+QList<QObject *> ClientModel::getMyPokemons() {
+    auto username = _client.username();
+    if (!_users_valid) fetch_users();
+    for (auto user : _users) {
+        if (user.username != username) continue;
+        QList<QObject *> ret;
+
+        for (const auto& pokemon : user.pokemons) {
+            auto poke = new PokemonModel;
+            poke->m_level = pokemon->level();
+            poke->m_name = QString::fromStdString(pokemon->name());
+            poke->m_hp = pokemon->max().hp;
+            poke->m_attack = pokemon->max().attack;
+            poke->m_spAttack = pokemon->max().spAttack;
+            poke->m_defense = pokemon->max().defense;
+            poke->m_spDefense = pokemon->max().spDefense;
+            poke->m_speed = pokemon->max().speed;
+
+            ret << poke;
+        }
+
+        return ret;
+    }
+
+    return {};
+}
+
+void ClientModel::fetch_boss_list() {
+    _boss_list = _client.get_boss();
+}
+
+QStringList ClientModel::getBossList() {
+    if (!_boss_list_valid) fetch_boss_list();
+    qDebug() << _boss_list;
+
+    return QStringList(QList<QString>(_boss_list.cbegin(), _boss_list.cend()));
+}
+
+void ClientModel::updateBossList() {
+    fetch_boss_list();
+    emit bossListChanged();
 }
 

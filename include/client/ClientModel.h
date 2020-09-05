@@ -52,6 +52,8 @@ Q_OBJECT
     Q_PROPERTY(QVariant users READ getUsers NOTIFY usersChanged)
     Q_PROPERTY(QList<QObject *> userPokemons READ getUserPokemons NOTIFY usersChanged)
     Q_PROPERTY(int viewUser READ viewUser NOTIFY viewUserChanged)
+    Q_PROPERTY(QList<QObject *> myPokemons READ getMyPokemons NOTIFY usersChanged)
+    Q_PROPERTY(QStringList bossList READ getBossList NOTIFY bossListChanged)
 public:
     ClientModel(QHostAddress addr, quint16 port, QObject *parent = 0);
 
@@ -65,6 +67,7 @@ public:
 
     QList<QObject *> getUserPokemons();
 
+    QList<QObject *> getMyPokemons();
 
     Q_INVOKABLE void updateUsers();
 
@@ -78,6 +81,9 @@ public:
 
     Q_INVOKABLE int getAuthedUser();
 
+    Q_INVOKABLE void updateBossList();
+
+    QStringList getBossList();
 
 Q_SIGNALS:
 
@@ -89,13 +95,19 @@ Q_SIGNALS:
 
     void viewUserChanged();
 
+    void bossListChanged();
+
 private:
     void fetch_users();
+    void fetch_boss_list();
 
     PokemonClient _client;
     QVector<PokemonUser> _users;
+    QVector<QString> _boss_list;
     bool _users_valid;
+    bool _boss_list_valid;
     int _current_view_user;
+    int _battle_pokemon;
 };
 
 
