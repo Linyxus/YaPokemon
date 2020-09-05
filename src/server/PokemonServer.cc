@@ -105,6 +105,9 @@ void PokemonServer::message_handler() {
         if (msg_type == "pokemon::list") {
             resp = pokemon_list_handler(msg["payload"]);
         }
+        if (msg_type == "pokemon::get_id") {
+            resp = pokemon_get_id(msg["payload"]);
+        }
         if (msg_type == "battle::exe") {
             resp = battle_exe_handler(msg["payload"]);
         }
@@ -539,5 +542,17 @@ QByteArray PokemonServer::battle_list_boss_handler(const json &payload) {
 
     auto blist = compose_boss_list();
     return compose_succ_resp({{"boss", blist}});
+}
+
+QByteArray PokemonServer::pokemon_get_id(const json &payload) {
+    auto username = check_req_auth(payload);
+    if (username.isEmpty()) {
+        return compose_error_resp("需要认证");
+    }
+    int idx = payload["idx"].get<int>();
+    auto pokemons = _db.table("users")
+                       .where(_x_["username"] == username.toStdString())
+                       .get()["pokemons"].get<vector<int>>();
+    return compose_succ_resp({{"pid", pokemons[idx]}});
 }
 

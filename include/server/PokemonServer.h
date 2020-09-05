@@ -57,6 +57,7 @@ private:
     QByteArray user_check_auth_handler(json payload);
     QByteArray user_list_handler(const json& payload);
     QByteArray pokemon_list_handler(const json& payload);
+    QByteArray pokemon_get_id(const json &payload);
     QByteArray battle_exe_handler(const json& payload);
     QByteArray battle_real_handler(const json& payload);
     QByteArray battle_list_boss_handler(const json& payload);

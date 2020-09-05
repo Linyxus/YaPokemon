@@ -219,12 +219,6 @@ BattleStep PokemonClient::parse_pokemon_step(const json &step) {
     return ret;
 }
 
-/**
- * Start a real battle using pokemon <pid> with boss <boss_id>.
- * @param pid pokemon id
- * @param boss_id boss id
- * @return battle result
- */
 BattleResult PokemonClient::battle_real(int pid, int boss_id) {
     assert(!_token.isEmpty());
     json msg = compose_msg("battle::real",
@@ -238,6 +232,23 @@ BattleResult PokemonClient::battle_real(int pid, int boss_id) {
     if (status == "okay") {
         // parse the result
         return parse_result(resp["result"]);
+    } else {
+        return {};
+    }
+}
+
+int PokemonClient::get_my_pokemon_id(int idx) {
+    assert(!_token.isEmpty());
+    json msg = compose_msg("pokemon::get_id",
+                           {
+                                   {"token",   _token.toStdString()},
+                                   {"idx",     idx},
+                           });
+    json resp = request(msg);
+    auto status = resp["status"].get<string>();
+    if (status == "okay") {
+        // parse the result
+        return resp["pid"].get<int>();
     } else {
         return {};
     }

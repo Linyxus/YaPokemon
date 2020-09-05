@@ -145,3 +145,57 @@ void ClientModel::updateBossList() {
     emit bossListChanged();
 }
 
+void ClientModel::setBattlePokemon(int idx) {
+    int pid = _client.get_my_pokemon_id(idx);
+    _battle_pokemon = idx;
+}
+
+QObject *ClientModel::getBattleResult() {
+    auto result = new ResultModel;
+
+    result->m_winner = _battle_result.winner;
+
+    result->m_steps = {};
+    auto &steps = _battle_result.history.steps;
+    for (int i = 0; i < _battle_result.history.steps.length(); i++) {
+        auto step = new StepModel;
+        auto left = new PokemonStateModel;
+        auto right = new PokemonStateModel;
+        left->m_name = steps[i].current.left.name;
+        left->m_level = steps[i].current.left.level;
+        left->m_hp = steps[i].current.left.hp;
+        right->m_name = steps[i].current.right.name;
+        right->m_level = steps[i].current.right.level;
+        right->m_hp = steps[i].current.right.hp;
+
+        step->m_current_left = left;
+        step->m_current_right = right;
+        step->m_turn = steps[i].turn;
+        step->m_miss = steps[i].miss;
+        step->m_move = steps[i].move;
+
+        result->m_steps << step;
+    }
+
+    auto left = new PokemonStateModel;
+    auto right = new PokemonStateModel;
+    left->m_name = _battle_result.history.initial.left.name;
+    left->m_level = _battle_result.history.initial.left.level;
+    left->m_hp = _battle_result.history.initial.left.hp;
+    right->m_name = _battle_result.history.initial.right.name;
+    right->m_level = _battle_result.history.initial.right.level;
+    right->m_hp = _battle_result.history.initial.right.hp;
+    result->m_initial_left = left;
+    result->m_initial_right = right;
+
+    return result;
+}
+
+void ClientModel::startExeBattle(int boss_id) {
+    _battle_result = _client.battle_exe(_battle_pokemon, boss_id);
+}
+
+void ClientModel::startRealBattle(int boss_id) {
+    _battle_result = _client.battle_real(_battle_pokemon, boss_id);
+}
+
