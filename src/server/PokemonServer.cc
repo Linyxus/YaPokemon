@@ -349,6 +349,20 @@ json PokemonServer::compose_battle_round(const BattleRound &round) {
     return ret;
 }
 
+/**
+ * 将对战结果序列化为JSON
+ * @param result 对战结果
+ * @return JSON
+ *
+ * JSON结构：
+ *   { winner
+ *     history [
+ *       { miss move turn }
+ *       left
+ *       right
+ *     ]
+ *   }
+ */
 json PokemonServer::compose_battle_result(const BattleResult &result) {
     json ret;
     ret["winner"] = result.first == LeftWin ? "left" : "right";
@@ -397,6 +411,11 @@ bool PokemonServer::remove_user_pokemon(const QString &username, int id) {
     return true;
 }
 
+/**
+ * 处理练习赛请求
+ * @param payload 请求载荷
+ * @return
+ */
 QByteArray PokemonServer::battle_exe_handler(const json &payload) {
     auto username = check_req_auth(payload);
     if (username.isEmpty()) {
@@ -414,11 +433,17 @@ QByteArray PokemonServer::battle_exe_handler(const json &payload) {
     if (res.first == LeftWin) {
         pokemon_learn(pid, Battle::get_exp(1, 1));
     }
+    _db.sync();
 
     auto result = compose_battle_result(res);
     return compose_succ_resp({{"result", result}});
 }
 
+/**
+ * 处理挑战赛请求
+ * @param payload
+ * @return
+ */
 QByteArray PokemonServer::battle_real_handler(const json &payload) {
     auto username = check_req_auth(payload);
     if (username.isEmpty()) {
@@ -448,11 +473,18 @@ QByteArray PokemonServer::battle_real_handler(const json &payload) {
             add_user_pokemon(username, id);
         }
     }
+    _db.sync();
 
     auto result = compose_battle_result(res);
     return compose_succ_resp({{"result", result}});
 }
 
+/**
+ * 检查小精灵是否属于用户
+ * @param username 用户名
+ * @param pid 宝可梦编号
+ * @return 是否属于用户
+ */
 bool PokemonServer::verify_user_pokemon(const QString &username, int pid) {
     auto pokemons = _db.table("users")
                        .where(_x_["username"] == username.toStdString())

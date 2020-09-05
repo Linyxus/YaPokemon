@@ -4,6 +4,8 @@
 
 #include <include/client/PokemonClient.h>
 #include <QNetworkDatagram>
+#include <QVector>
+#include <QString>
 #include <utility>
 #include <pokemon/pokemons/eevee.h>
 #include <pokemon/pokemons/pikachu.h>
@@ -120,7 +122,7 @@ QString PokemonClient::signup(const QString &username, const QString &password) 
     auto u = username.toStdString();
     auto p = password.toStdString();
     json msg = compose_msg("user::register", {{"username", u},
-                                          {"password", p}});
+                                              {"password", p}});
     json resp = request(msg);
     auto status = resp["status"].get<string>();
     if (status == "okay") {
@@ -132,5 +134,112 @@ QString PokemonClient::signup(const QString &username, const QString &password) 
 
 const QString &PokemonClient::username() const {
     return _username;
+}
+
+QVector<QString> PokemonClient::get_boss() {
+    assert(!_token.isEmpty());
+    json msg = compose_msg("battle::list_boss", {{"token", _token.toStdString()}});
+    json resp = request(msg);
+    auto status = resp["status"].get<string>();
+    if (status == "okay") {
+        // get users
+        json boss = resp["boss"];
+        auto vec = boss.get<vector<string>>();
+        QVector<QString> ret{};
+        for (const auto &s : vec) {
+            ret.push_back(QString::fromStdString(s));
+        }
+
+        return ret;
+    } else {
+        return {};
+    }
+}
+
+BattleResult PokemonClient::battle_exe(int pid, int boss_id) {
+    assert(!_token.isEmpty());
+    json msg = compose_msg("battle::exe",
+                           {
+                                   {"token",   _token.toStdString()},
+                                   {"pid",     pid},
+                                   {"boss_id", boss_id}
+                           });
+    json resp = request(msg);
+    auto status = resp["status"].get<string>();
+    if (status == "okay") {
+        // parse the result
+        return parse_result(resp["result"]);
+    } else {
+        return {};
+    }
+}
+
+BattleResult PokemonClient::parse_result(const json &result) {
+    QString winner = QString::fromStdString(result["winner"].get<string>());
+    auto history = parse_history(result["history"]);
+
+    return {winner, history};
+}
+
+BattleHistory PokemonClient::parse_history(const json &obj) {
+    // type of `obj` should be array
+    assert(obj.is_array());
+    BattleState initial;
+    initial.left = parse_pokemon_state(obj[0]["left"]);
+    initial.right = parse_pokemon_state(obj[0]["right"]);
+
+    BattleHistory ret;
+    ret.initial = initial;
+    for (int i = 1; i < obj.size(); i++) {
+        ret.steps.push_back(parse_pokemon_step(obj[i]));
+    }
+
+    return ret;
+}
+
+PokemonState PokemonClient::parse_pokemon_state(const json &state) {
+    QString name = QString::fromStdString(state["name"].get<string>());
+    int level = state["level"].get<int>();
+    int hp = state["hp"].get<int>();
+
+    return {name, level, hp};
+}
+
+BattleStep PokemonClient::parse_pokemon_step(const json &step) {
+    BattleStep ret;
+    ret.current.left = parse_pokemon_state(step["left"]);
+    ret.current.right = parse_pokemon_state(step["right"]);
+
+    ret.turn = QString::fromStdString(step["round"]["turn"].get<string>());
+    ret.miss = step["round"]["miss"].get<bool>();
+    if (!ret.miss) {
+        ret.move = QString::fromStdString(step["round"]["move"].get<string>());
+    }
+
+    return ret;
+}
+
+/**
+ * Start a real battle using pokemon <pid> with boss <boss_id>.
+ * @param pid pokemon id
+ * @param boss_id boss id
+ * @return battle result
+ */
+BattleResult PokemonClient::battle_real(int pid, int boss_id) {
+    assert(!_token.isEmpty());
+    json msg = compose_msg("battle::real",
+                           {
+                                   {"token",   _token.toStdString()},
+                                   {"pid",     pid},
+                                   {"boss_id", boss_id}
+                           });
+    json resp = request(msg);
+    auto status = resp["status"].get<string>();
+    if (status == "okay") {
+        // parse the result
+        return parse_result(resp["result"]);
+    } else {
+        return {};
+    }
 }
 

@@ -1,6 +1,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <QVector>
 #include <QObject>
 #include <QString>
 
@@ -20,10 +21,11 @@ int main(int argc, char *argv[])
         if (!obj && url == objUrl)
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
-    engine.load(url);
 
     ClientModel model(QHostAddress::LocalHost, 12345, &app);
     engine.rootContext()->setContextProperty("client_model", &model);
+
+    engine.load(url);
 
     return app.exec();
 }
