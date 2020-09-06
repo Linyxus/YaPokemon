@@ -73,6 +73,7 @@ private:
             PokemonDuraludon,
             PokemonHaxorus,
             PokemonArcanine,
+            PokemonCharizard,
             PokemonCorviknight,
             PokemonEevee,
             PokemonSnorlax,

@@ -27,10 +27,12 @@ enum PokemonId {
     /* 双斧战龙 */
     PokemonHaxorus,
     /* 钢铠鸦 */
-    PokemonCorviknight
+    PokemonCorviknight,
+    /* 喷火龙 */
+    PokemonCharizard
 };
 
-const int PokemonNum = 9;
+const int PokemonNum = 11;
 
 inline PokemonId rand_pokemon() {
     return static_cast<PokemonId>(randint(0, PokemonNum));
