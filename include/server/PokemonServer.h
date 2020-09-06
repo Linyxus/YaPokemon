@@ -76,6 +76,7 @@ private:
             PokemonCharizard,
             PokemonCorviknight,
             PokemonEevee,
+            PokemonVileplume,
             PokemonSnorlax,
             PokemonPikachu,
     };

@@ -90,6 +90,9 @@ shared_ptr<Pokemon> pokemon_from_json(json rec) {
     if (pid == PokemonCharizard) {
         ret = make_shared<PokemonOf<pokemon_of<PokemonCharizard>::type>>();
     }
+    if (pid == PokemonVileplume) {
+        ret = make_shared<PokemonOf<pokemon_of<PokemonVileplume>::type>>();
+    }
 
     ret->learn(exp);
     return ret;

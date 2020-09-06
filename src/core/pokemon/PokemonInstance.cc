@@ -69,5 +69,10 @@ shared_ptr<PokemonInstance> instance_of(const shared_ptr<Pokemon>& pokemon) {
         auto ret = get_instance_of(p);
         return ret;
     }
+    if (pid == PokemonVileplume) {
+        auto p = static_pointer_cast<PokemonOf<pokemon_of<PokemonVileplume>::type>>(pokemon);
+        auto ret = get_instance_of(p);
+        return ret;
+    }
     return nullptr;
 }

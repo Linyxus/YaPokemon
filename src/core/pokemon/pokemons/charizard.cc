@@ -2,7 +2,7 @@
 // Created by Yichen Xu on 2020/9/6.
 //
 
-#include "charizard.h"
+#include "include/core/pokemon/pokemons/charizard.h"
 #include <move/moves/Inferno.h>
 #include <move/moves/FlameWheel.h>
 #include <move/moves/FireThrower.h>

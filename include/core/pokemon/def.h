@@ -29,7 +29,9 @@ enum PokemonId {
     /* 钢铠鸦 */
     PokemonCorviknight,
     /* 喷火龙 */
-    PokemonCharizard
+    PokemonCharizard,
+    /* 霸王花 */
+    PokemonVileplume
 };
 
 const int PokemonNum = 11;
