@@ -19,6 +19,7 @@
 #include <pokemon/pokemons/corviknight.h>
 #include <pokemon/pokemons/charizard.h>
 #include <pokemon/pokemons/vileplume.h>
+#include <pokemon/pokemons/lapras.h>
 
 template<PokemonId i>
 struct pokemon_of;
@@ -81,6 +82,11 @@ struct pokemon_of<PokemonCharizard> {
 template<>
 struct pokemon_of<PokemonVileplume> {
     typedef Vileplume type;
+};
+
+template<>
+struct pokemon_of<PokemonLapras> {
+    typedef Lapras type;
 };
 
 #endif //POKEMON_CORE_TYPE_MAP_H

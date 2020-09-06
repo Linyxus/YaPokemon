@@ -96,6 +96,8 @@ BattleRound Battle::proceed() {
                 _right->accept_action(action);
             }
         }
+
+        _left->update_buff();
     } else {
         move = get_move(_right);
         actions = move->move(_right, _left);
@@ -106,6 +108,8 @@ BattleRound Battle::proceed() {
                 _left->accept_action(action);
             }
         }
+
+        _right->update_buff();
     }
 
     _turn_count += 1;

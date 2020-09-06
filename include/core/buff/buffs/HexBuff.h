@@ -19,6 +19,10 @@ public:
     bool expire() const override;
     void tick() override;
 
+    shared_ptr<Buff> clone() const override {
+        return make_shared<HexBuff>(*this);
+    }
+
 private:
     AbilityAxis _axis;
     llint _value;

@@ -79,7 +79,7 @@ template<typename T>
 Hexagon<llint> PokemonInstanceOf<T>::current() const {
     Hexagon<llint> ret = _current;
     for (const auto &p : _buff) {
-        ret = p->map_current(_current);
+        ret = p->map_current(ret);
     }
 
     return ret;
@@ -145,6 +145,11 @@ void PokemonInstanceOf<T>::update_buff() {
 template<typename T>
 shared_ptr<PokemonInstance> PokemonInstanceOf<T>::clone() const {
     shared_ptr<PokemonInstanceOf<T>> ret = make_shared<PokemonInstanceOf<T>>(*this);
+    vector<shared_ptr<Buff>> new_buff {};
+    for (const auto &pb : _buff) {
+        new_buff.push_back(pb->clone());
+    }
+    ret->_buff = new_buff;
     return ret;
 }
 

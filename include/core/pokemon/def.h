@@ -31,7 +31,9 @@ enum PokemonId {
     /* 喷火龙 */
     PokemonCharizard,
     /* 霸王花 */
-    PokemonVileplume
+    PokemonVileplume,
+    /* 拉普拉斯 */
+    PokemonLapras
 };
 
 const int PokemonNum = 11;

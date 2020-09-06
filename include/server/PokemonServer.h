@@ -69,6 +69,7 @@ private:
     QVector<PokemonId> _boss = {
             PokemonZacian,
             PokemonZamazenta,
+            PokemonLapras,
             PokemonDragapult,
             PokemonDuraludon,
             PokemonHaxorus,

@@ -19,6 +19,10 @@ public:
     void tick() override;
     string name() const override;
 
+    shared_ptr<Buff> clone() const override {
+        return make_shared<TypeActionBuff>(*this);
+    }
+
 private:
     MoveCat _cat;
     double _rate;

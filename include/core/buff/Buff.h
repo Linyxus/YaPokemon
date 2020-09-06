@@ -24,6 +24,8 @@ public:
     virtual string name() const = 0;
 
     virtual void tick() = 0;
+
+    virtual shared_ptr<Buff> clone() const = 0;
 };
 
 #endif //POKEMON_CORE_BUFF_H
