@@ -33,10 +33,12 @@ enum PokemonId {
     /* 霸王花 */
     PokemonVileplume,
     /* 拉普拉斯 */
-    PokemonLapras
+    PokemonLapras,
+    /* 百变怪 */
+    PokemonDitto
 };
 
-const int PokemonNum = 11;
+const int PokemonNum = 14;
 
 inline PokemonId rand_pokemon() {
     return static_cast<PokemonId>(randint(0, PokemonNum));

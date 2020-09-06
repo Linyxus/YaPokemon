@@ -96,6 +96,9 @@ shared_ptr<Pokemon> pokemon_from_json(json rec) {
     if (pid == PokemonLapras) {
         ret = make_shared<PokemonOf<pokemon_of<PokemonLapras>::type>>();
     }
+    if (pid == PokemonDitto) {
+        ret = make_shared<PokemonOf<pokemon_of<PokemonDitto>::type>>();
+    }
 
     ret->learn(exp);
     return ret;

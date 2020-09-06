@@ -77,6 +77,7 @@ private:
             PokemonCharizard,
             PokemonCorviknight,
             PokemonEevee,
+            PokemonDitto,
             PokemonVileplume,
             PokemonSnorlax,
             PokemonPikachu,

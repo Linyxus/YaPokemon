@@ -37,6 +37,7 @@
         <file>static/喷火龙.png</file>
         <file>static/霸王花.png</file>
         <file>static/拉普拉斯.png</file>
+        <file>static/百变怪.png</file>
     </qresource>
     <qresource prefix="/static"/>
     <qresource prefix="/static" lang="zh-cn"/>
