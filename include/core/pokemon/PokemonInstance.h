@@ -9,6 +9,8 @@
 #include <buff/Buff.h>
 #include <action/AttackAction.h>
 #include <action/SpAttackAction.h>
+#include <action/BufAction.h>
+#include <action/HealAction.h>
 #include <vector>
 #include <memory>
 
@@ -22,7 +24,7 @@ public:
 
     virtual const Pokemon *pokemon() const = 0;
 
-    virtual Hexagon<uint> current() const = 0;
+    virtual Hexagon<llint> current() const = 0;
 
     virtual void accept_action(shared_ptr<Action> action) = 0;
 
@@ -47,7 +49,7 @@ public:
 
     const Pokemon *pokemon() const override;
 
-    Hexagon<uint> current() const override;
+    Hexagon<llint> current() const override;
 
     void accept_action(shared_ptr<Action> action) override;
 
@@ -59,7 +61,7 @@ public:
 
 private:
     PokemonOf<T> _pokemon;
-    Hexagon<uint> _current;
+    Hexagon<llint> _current;
     vector<shared_ptr<Buff>> _buff;
 };
 
@@ -74,8 +76,8 @@ const Pokemon *PokemonInstanceOf<T>::pokemon() const {
 }
 
 template<typename T>
-Hexagon<uint> PokemonInstanceOf<T>::current() const {
-    Hexagon<uint> ret = _current;
+Hexagon<llint> PokemonInstanceOf<T>::current() const {
+    Hexagon<llint> ret = _current;
     for (const auto &p : _buff) {
         ret = p->map_current(_current);
     }
@@ -89,7 +91,7 @@ void PokemonInstanceOf<T>::accept_action(shared_ptr<Action> action) {
         shared_ptr<AttackAction> p = dynamic_pointer_cast<AttackAction, Action>(action);
         double r = defense2rate(_current.defense);
         r = 1. - r;
-        uint val = (int) (r * p->value);
+        llint val = (int) (r * p->value);
         if (this->_current.hp >= val) {
             this->_current.hp -= val;
         } else {
@@ -97,14 +99,28 @@ void PokemonInstanceOf<T>::accept_action(shared_ptr<Action> action) {
         }
     }
     if (action->type() == ActSpAttack) {
-        shared_ptr<SpAttackAction> p = static_pointer_cast<SpAttackAction, Action>(action);
+        shared_ptr<SpAttackAction> p = dynamic_pointer_cast<SpAttackAction, Action>(action);
         double r = defense2rate(_current.spDefense);
         r = 1. - r;
-        uint val = (int) (r * p->value);
+        llint val = (int) (r * p->value);
         if (this->_current.hp >= val) {
             this->_current.hp -= val;
         } else {
             this->_current.hp = 0;
+        }
+    }
+    if (action->type() == ActBuf) {
+        shared_ptr<BufAction> buff_act = dynamic_pointer_cast<BufAction>(action);
+        this->_buff.push_back(buff_act->_buff);
+    }
+    if (action->type() == ActHeal) {
+        shared_ptr<HealAction> heal_act = dynamic_pointer_cast<HealAction>(action);
+        this->_current.hp += heal_act->value;
+        if (this->_current.hp < 0) {
+            this->_current.hp = 0;
+        }
+        if (this->_current.hp > this->pokemon()->max().hp) {
+            this->_current.hp = this->pokemon()->max().hp;
         }
     }
 }

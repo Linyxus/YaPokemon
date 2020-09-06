@@ -32,17 +32,17 @@ public:
     BattleRound proceed();
     BattleStatus check() const;
     PokemonTurn next_turn() const;
-    PokemonTurn turn_at(uint i) const;
+    PokemonTurn turn_at(llint i) const;
     shared_ptr<PokemonInstance> left() const;
     shared_ptr<PokemonInstance> right() const;
-    uint turn_count() const;
+    llint turn_count() const;
 
     static int get_exp(int this_level, int that_level);
     int exp_gain() const;
 private:
     shared_ptr<PokemonInstance> _left;
     shared_ptr<PokemonInstance> _right;
-    uint _turn_count;
+    llint _turn_count;
 };
 
 #endif //POKEMON_CORE_BATTLE_H

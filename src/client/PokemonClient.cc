@@ -72,6 +72,12 @@ shared_ptr<Pokemon> pokemon_from_json(json rec) {
     if (pid == PokemonZamazenta) {
         ret = make_shared<PokemonOf<pokemon_of<PokemonZamazenta>::type>>();
     }
+    if (pid == PokemonArcanine) {
+        ret = make_shared<PokemonOf<pokemon_of<PokemonArcanine>::type>>();
+    }
+    if (pid == PokemonSnorlax) {
+        ret = make_shared<PokemonOf<pokemon_of<PokemonSnorlax>::type>>();
+    }
 
     ret->learn(exp);
     return ret;

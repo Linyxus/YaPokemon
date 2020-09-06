@@ -8,8 +8,8 @@ PokemonType NormalPokemonTemplate::type() const {
     return PTNormal;
 }
 
-Hexagon<uint> NormalPokemonTemplate::growth() const {
-    return Hexagon<uint> {
+Hexagon<llint> NormalPokemonTemplate::growth() const {
+    return Hexagon<llint> {
         2,
         2,
         2,
@@ -23,7 +23,7 @@ PokemonType SpAttackPokemonTemplate::type() const {
     return PTSpAttack;
 }
 
-Hexagon<uint> SpAttackPokemonTemplate::growth() const {
+Hexagon<llint> SpAttackPokemonTemplate::growth() const {
     return {
         1,
         1,
@@ -34,7 +34,7 @@ Hexagon<uint> SpAttackPokemonTemplate::growth() const {
     };
 }
 
-Hexagon<uint> SuperPokemonTemplate::growth() const {
+Hexagon<llint> SuperPokemonTemplate::growth() const {
     return {
         3,
         3,
@@ -49,7 +49,7 @@ PokemonType SuperPokemonTemplate::type() const {
     return PTSuper;
 }
 
-Hexagon<uint> AttackPokemonTemplate::growth() const {
+Hexagon<llint> AttackPokemonTemplate::growth() const {
     return {
             1,
             5,
@@ -64,7 +64,7 @@ PokemonType AttackPokemonTemplate::type() const {
     return PTAttack;
 }
 
-Hexagon<uint> DefensePokemonTemplate::growth() const {
+Hexagon<llint> DefensePokemonTemplate::growth() const {
     return {
         2,
         1,
@@ -79,7 +79,7 @@ PokemonType DefensePokemonTemplate::type() const {
     return PTDefense;
 }
 
-Hexagon<uint> HpPokemonTemplate::growth() const {
+Hexagon<llint> HpPokemonTemplate::growth() const {
     return {
         7,
         1,
@@ -94,7 +94,7 @@ PokemonType HpPokemonTemplate::type() const {
     return PTHp;
 }
 
-Hexagon<uint> SpeedPokemonTemplate::growth() const {
+Hexagon<llint> SpeedPokemonTemplate::growth() const {
     return {
         1,
         3,

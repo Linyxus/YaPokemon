@@ -328,6 +328,16 @@ shared_ptr<Pokemon> PokemonServer::pokemon_from_info(PokemonId pid, int exp) {
         ret->learn(exp);
         return ret;
     }
+    if (pid == PokemonArcanine) {
+        auto ret = make_shared<PokemonOf<pokemon_of<PokemonArcanine>::type>>();
+        ret->learn(exp);
+        return ret;
+    }
+    if (pid == PokemonSnorlax) {
+        auto ret = make_shared<PokemonOf<pokemon_of<PokemonSnorlax>::type>>();
+        ret->learn(exp);
+        return ret;
+    }
 
     return nullptr;
 }

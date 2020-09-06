@@ -12,7 +12,7 @@ std::string Pikachu::name() const {
     return "皮卡丘";
 }
 
-Hexagon<uint> Pikachu::base() const {
+Hexagon<llint> Pikachu::base() const {
     return {
             8,
             8,

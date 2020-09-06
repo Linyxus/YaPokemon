@@ -15,10 +15,10 @@ public:
     ~Pokemon() = default;
 
     virtual std::string name() const = 0;
-    virtual uint level() const = 0;
-    virtual Hexagon<uint> max() const = 0;
+    virtual llint level() const = 0;
+    virtual Hexagon<llint> max() const = 0;
 
-    virtual void learn(uint exp) = 0;
+    virtual void learn(llint exp) = 0;
     virtual const BasePokemonTemplate *temp() const = 0;
 };
 
@@ -29,14 +29,14 @@ public:
     ~PokemonOf() = default;
 
     std::string name() const override;
-    uint level() const override;
-    Hexagon<uint> max() const override;
+    llint level() const override;
+    Hexagon<llint> max() const override;
 
-    void learn(uint exp) override;
+    void learn(llint exp) override;
     const BasePokemonTemplate * temp() const override;
 private:
     T _template;
-    uint _exp;
+    llint _exp;
 };
 
 template<typename T>
@@ -49,15 +49,15 @@ std::string PokemonOf<T>::name() const {
 }
 
 template<typename T>
-uint PokemonOf<T>::level() const {
-    uint x = _exp / 50;
+llint PokemonOf<T>::level() const {
+    llint x = _exp / 50;
     return x > 15 ? 15 : x;
 }
 
 template<typename T>
-Hexagon<uint> PokemonOf<T>::max() const {
-    uint l = level();
-    return Hexagon<uint> {
+Hexagon<llint> PokemonOf<T>::max() const {
+    llint l = level();
+    return Hexagon<llint> {
         _template.base().hp + _template.growth().hp * l,
         _template.base().attack + _template.growth().attack * l,
         _template.base().defense + _template.growth().defense * l,
@@ -68,7 +68,7 @@ Hexagon<uint> PokemonOf<T>::max() const {
 }
 
 template<typename T>
-void PokemonOf<T>::learn(uint exp) {
+void PokemonOf<T>::learn(llint exp) {
     _exp += exp;
 }
 

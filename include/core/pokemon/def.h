@@ -17,10 +17,14 @@ enum PokemonId {
     /* 多龙 (多龙巴鲁托) */
     PokemonDragapult,
     /* 臧然玛特 (宝可梦盾神兽) */
-    PokemonZamazenta
+    PokemonZamazenta,
+    /* 风速狗 */
+    PokemonArcanine,
+    /* 卡比兽 */
+    PokemonSnorlax
 };
 
-const int PokemonNum = 5;
+const int PokemonNum = 6;
 
 inline PokemonId rand_pokemon() {
     return static_cast<PokemonId>(randint(0, PokemonNum));

@@ -12,6 +12,8 @@
 #include <pokemon/pokemons/zacian.h>
 #include <pokemon/pokemons/dragapult.h>
 #include <pokemon/pokemons/zamazenta.h>
+#include <pokemon/pokemons/arcanine.h>
+#include <pokemon/pokemons/snorlax.h>
 
 template<PokemonId i>
 struct pokemon_of;
@@ -39,6 +41,16 @@ struct pokemon_of<PokemonDragapult> {
 template<>
 struct pokemon_of<PokemonZamazenta> {
     typedef Zamazenta type;
+};
+
+template<>
+struct pokemon_of<PokemonArcanine> {
+    typedef Arcanine type;
+};
+
+template<>
+struct pokemon_of<PokemonSnorlax> {
+    typedef Snorlax type;
 };
 
 #endif //POKEMON_CORE_TYPE_MAP_H

@@ -10,12 +10,12 @@
 
 class AttackMove : public Move {
 public:
-    AttackMove(uint power, MoveCat cat);
+    AttackMove(llint power, MoveCat cat);
     ~AttackMove() = default;
 
     Actions move(shared_ptr<PokemonInstance> self, shared_ptr<PokemonInstance> target) override;
     Actions attack_action(const shared_ptr<PokemonInstance>& self, ActionTarget t = ActTarget);
-    uint power;
+    llint power;
     MoveCat cat;
 };
 

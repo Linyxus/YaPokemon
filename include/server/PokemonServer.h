@@ -70,7 +70,9 @@ private:
             PokemonZacian,
             PokemonZamazenta,
             PokemonDragapult,
+            PokemonArcanine,
             PokemonEevee,
+            PokemonSnorlax,
             PokemonPikachu,
     };
 };

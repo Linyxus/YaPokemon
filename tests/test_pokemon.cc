@@ -47,7 +47,7 @@ TEST(PokemonTest, PolyWorks) {
 TEST(PokemonTest, MaxWorks) {
     shared_ptr<Pokemon> pokemon = make_shared<PokemonOf<Eevee>>();
     auto t = pokemon->temp();
-    for (uint i = 0; i <= 15; i++) {
+    for (llint i = 0; i <= 15; i++) {
         ASSERT_EQ(pokemon->level(), i);
         ASSERT_EQ(pokemon->max().hp, t->base().hp + i * t->growth().hp);
         ASSERT_EQ(pokemon->max().attack, t->base().attack + i * t->growth().attack);

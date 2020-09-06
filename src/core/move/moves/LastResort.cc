@@ -2,7 +2,7 @@
 // Created by Yichen Xu on 2020/9/6.
 //
 
-#include "LastResort.h"
+#include "include/core/move/moves/LastResort.h"
 
 LastResort::LastResort()
         : AttackMove(130, MoveCat::MCNormal) {

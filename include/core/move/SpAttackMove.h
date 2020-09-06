@@ -10,12 +10,12 @@
 
 class SpAttackMove : public Move {
 public:
-    SpAttackMove(uint power, MoveCat cat);
+    SpAttackMove(llint power, MoveCat cat);
     ~SpAttackMove() = default;
 
     Actions move(shared_ptr<PokemonInstance> self, shared_ptr<PokemonInstance> target) override;
     Actions attack_action(const shared_ptr<PokemonInstance>& self);
-    uint power;
+    llint power;
     MoveCat cat;
 };
 

@@ -9,19 +9,19 @@
 #include <cstdlib>
 #include <vector>
 
-typedef unsigned int uint;
+typedef long long llint;
 
-uint ensure_range(int x, uint low, uint high = -1);
+llint ensure_range(int x, llint low, llint high = -1);
 
-double power2rate(uint power);
+double power2rate(llint power);
 
 int randint(int low, int high);
 
-double defense2rate(uint d);
+double defense2rate(llint d);
 
-double speed2miss(uint d);
+double speed2miss(llint d);
 
-double speed2critical(uint d);
+double speed2critical(llint d);
 
 bool sample_miss(double miss_rate);
 

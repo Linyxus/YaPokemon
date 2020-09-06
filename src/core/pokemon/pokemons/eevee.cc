@@ -9,8 +9,8 @@ std::string Eevee::name() const {
     return "伊布";
 }
 
-Hexagon<uint> Eevee::base() const {
-    return Hexagon<uint> {
+Hexagon<llint> Eevee::base() const {
+    return Hexagon<llint> {
             10,
             10,
             10,

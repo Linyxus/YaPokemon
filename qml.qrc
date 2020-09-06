@@ -29,6 +29,8 @@
         <file>static/苍响.png</file>
         <file>static/臧然玛特.png</file>
         <file>static/多龙.png</file>
+        <file>static/风速狗.png</file>
+        <file>static/卡比兽.png</file>
     </qresource>
     <qresource prefix="/static"/>
     <qresource prefix="/static" lang="zh-cn"/>

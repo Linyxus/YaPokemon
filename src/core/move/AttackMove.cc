@@ -5,10 +5,10 @@
 #include <move/AttackMove.h>
 #include <action/AttackAction.h>
 
-AttackMove::AttackMove(uint power, MoveCat cat) : power(power), cat(cat) {}
+AttackMove::AttackMove(llint power, MoveCat cat) : power(power), cat(cat) {}
 
 Actions AttackMove::attack_action(const shared_ptr<PokemonInstance>& self, ActionTarget t) {
-    uint value = (int) (power2rate(power) * self->current().attack);
+    llint value = (int) (power2rate(power) * self->current().attack);
     auto ret = make_shared<AttackAction>(value, this->cat, t);
     return { ret };
 }

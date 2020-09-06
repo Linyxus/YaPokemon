@@ -10,11 +10,11 @@
 
 class TypeActionBuff : public Buff {
 public:
-    TypeActionBuff(MoveCat cat, double rate, uint expire, string name);
+    TypeActionBuff(MoveCat cat, double rate, llint expire, string name);
     ~TypeActionBuff() = default;
 
     void map_action(const std::shared_ptr<Action> &action) override;
-    Hexagon<uint> map_current(const Hexagon<uint> &current) override;
+    Hexagon<llint> map_current(const Hexagon<llint> &current) override;
     bool expire() const override;
     void tick() override;
     string name() const override;
@@ -23,7 +23,7 @@ private:
     MoveCat _cat;
     double _rate;
     string _name;
-    uint _expire;
+    llint _expire;
 };
 
 #endif //POKEMON_CORE_TYPEACTIONBUFF_H

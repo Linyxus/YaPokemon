@@ -23,8 +23,8 @@ public:
 
     virtual PokemonId id() const = 0;
 
-    virtual Hexagon<uint> growth() const = 0;
-    virtual Hexagon<uint> base() const = 0;
+    virtual Hexagon<llint> growth() const = 0;
+    virtual Hexagon<llint> base() const = 0;
 
     virtual std::string name() const = 0;
     virtual PokemonType type() const = 0;
@@ -42,7 +42,7 @@ public:
     NormalPokemonTemplate() = default;
     ~NormalPokemonTemplate() = default;
 
-    Hexagon<uint> growth() const override;
+    Hexagon<llint> growth() const override;
     PokemonType type() const override;
 };
 
@@ -51,7 +51,7 @@ public:
     AttackPokemonTemplate() = default;
     ~AttackPokemonTemplate() = default;
 
-    Hexagon<uint> growth() const override;
+    Hexagon<llint> growth() const override;
     PokemonType type() const override;
 };
 
@@ -60,7 +60,7 @@ public:
     SpAttackPokemonTemplate() = default;
     ~SpAttackPokemonTemplate() = default;
 
-    Hexagon<uint> growth() const override;
+    Hexagon<llint> growth() const override;
     PokemonType type() const override;
 };
 
@@ -69,7 +69,7 @@ public:
     DefensePokemonTemplate() = default;
     ~DefensePokemonTemplate() = default;
 
-    Hexagon<uint> growth() const override;
+    Hexagon<llint> growth() const override;
     PokemonType type() const override;
 };
 
@@ -78,7 +78,7 @@ public:
     HpPokemonTemplate() = default;
     ~HpPokemonTemplate() = default;
 
-    Hexagon<uint> growth() const override;
+    Hexagon<llint> growth() const override;
     PokemonType type() const override;
 };
 
@@ -87,7 +87,7 @@ public:
     SpeedPokemonTemplate() = default;
     ~SpeedPokemonTemplate() = default;
 
-    Hexagon<uint> growth() const override;
+    Hexagon<llint> growth() const override;
     PokemonType type() const override;
 };
 
@@ -96,7 +96,7 @@ public:
     SuperPokemonTemplate() = default;
     ~SuperPokemonTemplate() = default;
 
-    Hexagon<uint> growth() const override;
+    Hexagon<llint> growth() const override;
     PokemonType type() const override;
 };
 

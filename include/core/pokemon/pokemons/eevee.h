@@ -15,7 +15,7 @@ public:
     ~Eevee() = default;
 
     std::string name() const override;
-    Hexagon<uint> base() const override;
+    Hexagon<llint> base() const override;
     PokemonId id() const override;
 
     std::vector<shared_ptr<Move>> moves() const override;

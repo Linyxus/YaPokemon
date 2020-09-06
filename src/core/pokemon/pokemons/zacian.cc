@@ -12,7 +12,7 @@ std::string Zacian::name() const {
     return "苍响";
 }
 
-Hexagon<uint> Zacian::base() const {
+Hexagon<llint> Zacian::base() const {
     return {
             10,
             30,

@@ -4,7 +4,7 @@
 
 #include <buff/buffs/HexBuff.h>
 
-HexBuff::HexBuff(AbilityAxis axis, uint value, uint expire, string name) {
+HexBuff::HexBuff(AbilityAxis axis, llint value, llint expire, string name) {
     _axis = axis;
     _value = value;
     _name = name;
@@ -14,25 +14,31 @@ HexBuff::HexBuff(AbilityAxis axis, uint value, uint expire, string name) {
 void HexBuff::map_action(const shared_ptr<Action> &action) {
 }
 
-Hexagon<uint> HexBuff::map_current(const Hexagon<uint> &current) {
+Hexagon<llint> HexBuff::map_current(const Hexagon<llint> &current) {
     auto ret = current;
     if (_axis == Hp) {
         ret.hp += _value;
+        ret.hp = ret.hp < 0 ? 0 : ret.hp;
     }
     if (_axis == Attack) {
         ret.attack += _value;
+        ret.attack = ret.attack < 0 ? 0 : ret.attack;
     }
     if (_axis == SpAttack) {
         ret.spAttack += _value;
+        ret.spAttack = ret.spAttack < 0 ? 0 : ret.spAttack;
     }
     if (_axis == Defense) {
         ret.defense += _value;
+        ret.defense = ret.defense < 0 ? 0 : ret.defense;
     }
     if (_axis == SpDefense) {
         ret.spDefense += _value;
+        ret.spDefense = ret.spDefense < 0 ? 0 : ret.spDefense;
     }
     if (_axis == Speed) {
         ret.speed += _value;
+        ret.speed = ret.speed < 0 ? 0 : ret.speed;
     }
     return ret;
 }

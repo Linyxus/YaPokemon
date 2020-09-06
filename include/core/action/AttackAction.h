@@ -7,6 +7,7 @@
 
 #include <action/Action.h>
 #include <types/move.h>
+#include <common.h>
 
 class AttackAction : public Action {
 public:
@@ -16,7 +17,7 @@ public:
     ActionType type() const override;
     ActionTarget target() const override;
 
-    int value;
+    llint value;
     MoveCat attack_type;
     ActionTarget _target;
 };

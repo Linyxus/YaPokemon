@@ -11,7 +11,7 @@ std::string Dragapult::name() const {
     return "多龙";
 }
 
-Hexagon<uint> Dragapult::base() const {
+Hexagon<llint> Dragapult::base() const {
     return {
             5,
             20,

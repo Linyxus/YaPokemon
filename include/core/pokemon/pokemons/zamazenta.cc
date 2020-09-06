@@ -12,7 +12,7 @@ std::string Zamazenta::name() const {
     return "臧然玛特";
 }
 
-Hexagon<uint> Zamazenta::base() const {
+Hexagon<llint> Zamazenta::base() const {
     return {
             20,
             10,

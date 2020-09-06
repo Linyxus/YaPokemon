@@ -39,5 +39,15 @@ shared_ptr<PokemonInstance> instance_of(const shared_ptr<Pokemon>& pokemon) {
         auto ret = get_instance_of(p);
         return ret;
     }
+    if (pid == PokemonArcanine) {
+        auto p = static_pointer_cast<PokemonOf<pokemon_of<PokemonArcanine>::type>>(pokemon);
+        auto ret = get_instance_of(p);
+        return ret;
+    }
+    if (pid == PokemonSnorlax) {
+        auto p = static_pointer_cast<PokemonOf<pokemon_of<PokemonSnorlax>::type>>(pokemon);
+        auto ret = get_instance_of(p);
+        return ret;
+    }
     return nullptr;
 }

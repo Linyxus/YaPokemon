@@ -5,7 +5,7 @@
 #include <battle/Battle.h>
 #include <move/Move.h>
 
-uint gcd(uint x, uint y) {
+llint gcd(llint x, llint y) {
     if (!y) return x;
     return gcd(y, x % y);
 }
@@ -24,13 +24,13 @@ shared_ptr<PokemonInstance> Battle::right() const {
     return _right;
 }
 
-PokemonTurn Battle::turn_at(uint i) const {
-    uint l = _left->current().speed;
-    uint r = _right->current().speed;
+PokemonTurn Battle::turn_at(llint i) const {
+    llint l = _left->current().speed;
+    llint r = _right->current().speed;
     swap(l, r);
-    uint current = 0;
-    uint step = gcd(l, r);
-    uint j = 0;
+    llint current = 0;
+    llint step = gcd(l, r);
+    llint j = 0;
     while (j < i) {
         if ((current % l) == 0) {
             j += 1;
@@ -75,7 +75,7 @@ BattleRound Battle::proceed() {
 
     Actions actions;
     shared_ptr<Move> move = nullptr;
-    uint speed = turn == RightTurn ? _left->current().speed : _right->current().speed;
+    llint speed = turn == RightTurn ? _left->current().speed : _right->current().speed;
     double miss_rate = speed2miss(speed);
     bool miss = sample_miss(miss_rate);
     if (miss) {
@@ -112,7 +112,7 @@ BattleRound Battle::proceed() {
     };
 }
 
-uint Battle::turn_count() const {
+llint Battle::turn_count() const {
     return _turn_count;
 }
 
