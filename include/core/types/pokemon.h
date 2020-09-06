@@ -11,7 +11,6 @@ enum PokemonType {
     PTAttack,
     PTSpAttack,
     PTDefense,
-    PTSpDefense,
     PTSpeed,
     PTSuper
 };

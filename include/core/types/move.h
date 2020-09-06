@@ -10,8 +10,8 @@ enum MoveCat {
     MCWater,
     MCFire,
     MCGrass,
-    MCIce,
     MCStorm,
+    MCIce,
     MCDragon,
     MCThunder,
     MCSacred

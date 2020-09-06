@@ -2,7 +2,7 @@
 // Created by Yichen Xu on 2020/9/6.
 //
 
-#include "arcanine.h"
+#include "include/core/pokemon/pokemons/arcanine.h"
 #include <move/moves/FireThrower.h>
 #include <move/moves/FlameWheel.h>
 #include <move/moves/QuickGuard.h>

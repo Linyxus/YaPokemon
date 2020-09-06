@@ -27,6 +27,8 @@ shared_ptr<PokemonInstance> Battle::right() const {
 PokemonTurn Battle::turn_at(llint i) const {
     llint l = _left->current().speed;
     llint r = _right->current().speed;
+    if (l == 0) l = 10;
+    if (r == 0) r = 10;
     swap(l, r);
     llint current = 0;
     llint step = gcd(l, r);

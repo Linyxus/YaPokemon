@@ -2,7 +2,7 @@
 // Created by Yichen Xu on 2020/9/6.
 //
 
-#include "Sleep.h"
+#include "include/core/move/moves/Sleep.h"
 #include <action/HealAction.h>
 
 Actions Sleep::move(shared_ptr<PokemonInstance> self, shared_ptr<PokemonInstance> target) {

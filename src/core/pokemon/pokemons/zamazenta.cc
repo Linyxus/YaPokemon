@@ -2,7 +2,7 @@
 // Created by Yichen Xu on 2020/9/6.
 //
 
-#include "zamazenta.h"
+#include "include/core/pokemon/pokemons/zamazenta.h"
 #include <move/moves/LastResort.h>
 #include <move/moves/GigaImpact.h>
 #include <move/moves/SacredBlade.h>

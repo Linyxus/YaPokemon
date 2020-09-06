@@ -21,10 +21,16 @@ enum PokemonId {
     /* 风速狗 */
     PokemonArcanine,
     /* 卡比兽 */
-    PokemonSnorlax
+    PokemonSnorlax,
+    /* 铝钢龙 */
+    PokemonDuraludon,
+    /* 双斧战龙 */
+    PokemonHaxorus,
+    /* 钢铠鸦 */
+    PokemonCorviknight
 };
 
-const int PokemonNum = 6;
+const int PokemonNum = 9;
 
 inline PokemonId rand_pokemon() {
     return static_cast<PokemonId>(randint(0, PokemonNum));

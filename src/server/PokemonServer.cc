@@ -338,6 +338,21 @@ shared_ptr<Pokemon> PokemonServer::pokemon_from_info(PokemonId pid, int exp) {
         ret->learn(exp);
         return ret;
     }
+    if (pid == PokemonDuraludon) {
+        auto ret = make_shared<PokemonOf<pokemon_of<PokemonDuraludon>::type>>();
+        ret->learn(exp);
+        return ret;
+    }
+    if (pid == PokemonHaxorus) {
+        auto ret = make_shared<PokemonOf<pokemon_of<PokemonHaxorus>::type>>();
+        ret->learn(exp);
+        return ret;
+    }
+    if (pid == PokemonCorviknight) {
+        auto ret = make_shared<PokemonOf<pokemon_of<PokemonCorviknight>::type>>();
+        ret->learn(exp);
+        return ret;
+    }
 
     return nullptr;
 }

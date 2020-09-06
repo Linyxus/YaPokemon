@@ -31,6 +31,9 @@
         <file>static/多龙.png</file>
         <file>static/风速狗.png</file>
         <file>static/卡比兽.png</file>
+        <file>static/铝钢龙.png</file>
+        <file>static/双斧战龙.png</file>
+        <file>static/钢铠鸦.png</file>
     </qresource>
     <qresource prefix="/static"/>
     <qresource prefix="/static" lang="zh-cn"/>

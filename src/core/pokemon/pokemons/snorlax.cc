@@ -2,7 +2,7 @@
 // Created by Yichen Xu on 2020/9/6.
 //
 
-#include "snorlax.h"
+#include "include/core/pokemon/pokemons/snorlax.h"
 #include <move/moves/BellyDrum.h>
 #include <move/moves/BodySlam.h>
 #include <move/moves/LastResort.h>
