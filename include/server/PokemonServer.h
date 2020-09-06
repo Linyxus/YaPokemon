@@ -66,7 +66,13 @@ private:
     yadb::Yadb _db;
     QUdpSocket _socket;
     const QByteArray jwt_secret = "19je9dhxplsa9";
-    QVector<PokemonId> _boss = { PokemonEevee, PokemonPikachu };
+    QVector<PokemonId> _boss = {
+            PokemonZacian,
+            PokemonZamazenta,
+            PokemonDragapult,
+            PokemonEevee,
+            PokemonPikachu,
+    };
 };
 
 #endif //YAPOKEMON_POKEMONSERVER_H

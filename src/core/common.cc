@@ -4,6 +4,22 @@
 
 #include <include/core/common.h>
 #include <cassert>
+#include <vector>
+
+int weighted_sample(std::vector<int> p) {
+    auto sum = 0;
+    for (auto i : p) {
+        sum += i;
+    }
+    auto i = randint(0, sum);
+    int acc = 0;
+    for (int j = 0; j < p.size(); j++) {
+        acc += p[j];
+        if (acc >= i) return j;
+    }
+
+    return 0;
+}
 
 double power2rate(uint power) {
     return power * power / 14400.0;
@@ -14,7 +30,7 @@ double defense2rate(uint d) {
 }
 
 double speed2miss(uint d) {
-    return -1 / (1 + d / 100.0) + 1;
+    return -1 / (1 + d / 200.0) + 1;
 }
 
 double speed2critical(uint d) {
@@ -32,7 +48,7 @@ uint ensure_range(int x, uint low, uint high) {
 
 int randint(int low, int high) {
     assert(low < high);
-    int x = std::rand();
+    int x = rand();
     int w = high - low;
     x = x % w + low;
     return x;
@@ -43,3 +59,4 @@ bool sample_miss(double miss_rate) {
     int x = randint(0, 10000 + 1);
     return x < threshold;
 }
+

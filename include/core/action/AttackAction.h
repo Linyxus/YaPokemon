@@ -10,7 +10,7 @@
 
 class AttackAction : public Action {
 public:
-    AttackAction(int value, MoveCat attack_type);
+    AttackAction(int value, MoveCat attack_type, ActionTarget target = ActTarget);
     ~AttackAction() = default;
 
     ActionType type() const override;
@@ -18,6 +18,7 @@ public:
 
     int value;
     MoveCat attack_type;
+    ActionTarget _target;
 };
 
 #endif //POKEMON_CORE_ATTACKACTION_H

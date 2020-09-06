@@ -14,7 +14,7 @@ public:
     ~AttackMove() = default;
 
     Actions move(shared_ptr<PokemonInstance> self, shared_ptr<PokemonInstance> target) override;
-    Actions attack_action(const shared_ptr<PokemonInstance>& self);
+    Actions attack_action(const shared_ptr<PokemonInstance>& self, ActionTarget t = ActTarget);
     uint power;
     MoveCat cat;
 };

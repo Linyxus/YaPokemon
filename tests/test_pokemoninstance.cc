@@ -18,9 +18,9 @@ TEST(PokemonInstanceTest, AttackWorks) {
     auto act = move->move(instance, instance);
     ASSERT_EQ(act[0]->type(), ActAttack);
     auto att = dynamic_pointer_cast<AttackAction>(act[0]);
-    ASSERT_EQ(att->value, 13);
+    ASSERT_EQ(att->value, 4);
     ASSERT_EQ(att->attack_type, MCNormal);
 
     instance->accept_actions(act);
-    ASSERT_EQ(instance->current().hp, 10 - 10);
+    ASSERT_EQ(instance->current().hp, 10 - 3);
 }

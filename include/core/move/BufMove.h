@@ -18,7 +18,7 @@ public:
     ActionTarget target;
 
     Actions move(shared_ptr<PokemonInstance> self, shared_ptr<PokemonInstance> target) override;
-    Actions buf_action() const;
+    Actions buf_action(ActionTarget t) const;
 };
 
 #endif //POKEMON_CORE_BUFMOVE_H

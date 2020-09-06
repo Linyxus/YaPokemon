@@ -26,6 +26,9 @@
         <file>qml/BattleView.qml</file>
         <file>qml/PokemonIndicator.qml</file>
         <file>qml/ResultView.qml</file>
+        <file>static/苍响.png</file>
+        <file>static/臧然玛特.png</file>
+        <file>static/多龙.png</file>
     </qresource>
     <qresource prefix="/static"/>
     <qresource prefix="/static" lang="zh-cn"/>

@@ -1,16 +1,16 @@
 //
-// Created by Yichen Xu on 2020/9/1.
+// Created by Yichen Xu on 2020/9/6.
 //
 
-#ifndef POKEMON_CORE_PIKACHU_H
-#define POKEMON_CORE_PIKACHU_H
+#ifndef YAPOKEMON_DRAGAPULT_H
+#define YAPOKEMON_DRAGAPULT_H
 
 #include <pokemon/PokemonTemplate.h>
 
-class Pikachu : public SpAttackPokemonTemplate {
+class Dragapult : public SpeedPokemonTemplate {
 public:
-    Pikachu() = default;
-    ~Pikachu() = default;
+    Dragapult() = default;
+    ~Dragapult() = default;
 
     std::string name() const override;
     Hexagon<uint> base() const override;
@@ -21,4 +21,4 @@ public:
 };
 
 
-#endif //POKEMON_CORE_PIKACHU_H
+#endif //YAPOKEMON_DRAGAPULT_H

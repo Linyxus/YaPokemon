@@ -1,16 +1,16 @@
 //
-// Created by Yichen Xu on 2020/9/1.
+// Created by Yichen Xu on 2020/9/6.
 //
 
-#ifndef POKEMON_CORE_PIKACHU_H
-#define POKEMON_CORE_PIKACHU_H
+#ifndef YAPOKEMON_ZAMAZENTA_H
+#define YAPOKEMON_ZAMAZENTA_H
 
 #include <pokemon/PokemonTemplate.h>
 
-class Pikachu : public SpAttackPokemonTemplate {
+class Zamazenta : public SuperPokemonTemplate {
 public:
-    Pikachu() = default;
-    ~Pikachu() = default;
+    Zamazenta() = default;
+    ~Zamazenta() = default;
 
     std::string name() const override;
     Hexagon<uint> base() const override;
@@ -21,4 +21,4 @@ public:
 };
 
 
-#endif //POKEMON_CORE_PIKACHU_H
+#endif //YAPOKEMON_ZAMAZENTA_H

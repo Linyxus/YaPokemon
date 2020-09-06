@@ -33,3 +33,78 @@ Hexagon<uint> SpAttackPokemonTemplate::growth() const {
         2
     };
 }
+
+Hexagon<uint> SuperPokemonTemplate::growth() const {
+    return {
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+    };
+}
+
+PokemonType SuperPokemonTemplate::type() const {
+    return PTSuper;
+}
+
+Hexagon<uint> AttackPokemonTemplate::growth() const {
+    return {
+            1,
+            5,
+            1,
+            1,
+            2,
+            2
+    };
+}
+
+PokemonType AttackPokemonTemplate::type() const {
+    return PTAttack;
+}
+
+Hexagon<uint> DefensePokemonTemplate::growth() const {
+    return {
+        2,
+        1,
+        4,
+        1,
+        4,
+        1
+    };
+}
+
+PokemonType DefensePokemonTemplate::type() const {
+    return PTDefense;
+}
+
+Hexagon<uint> HpPokemonTemplate::growth() const {
+    return {
+        7,
+        1,
+        1,
+        1,
+        1,
+        1
+    };
+}
+
+PokemonType HpPokemonTemplate::type() const {
+    return PTHp;
+}
+
+Hexagon<uint> SpeedPokemonTemplate::growth() const {
+    return {
+        1,
+        3,
+        1,
+        2,
+        1,
+        4
+    };
+}
+
+PokemonType SpeedPokemonTemplate::type() const {
+    return PTSpeed;
+}

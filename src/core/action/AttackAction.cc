@@ -4,9 +4,10 @@
 
 #include <action/AttackAction.h>
 
-AttackAction::AttackAction(int value, MoveCat attack_type) {
+AttackAction::AttackAction(int value, MoveCat attack_type, ActionTarget target) {
     this->value = value;
     this->attack_type = attack_type;
+    this->_target = target;
 }
 
 ActionType AttackAction::type() const {
@@ -14,5 +15,5 @@ ActionType AttackAction::type() const {
 }
 
 ActionTarget AttackAction::target() const {
-    return ActTarget;
+    return _target;
 }

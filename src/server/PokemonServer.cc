@@ -10,6 +10,7 @@
 #include <QDateTime>
 #include <pokemon/pokemons/eevee.h>
 #include <pokemon/pokemons/pikachu.h>
+#include <pokemon/pokemons/type_map.h>
 #include <move/Move.h>
 
 using yadb::_x_;
@@ -303,12 +304,27 @@ shared_ptr<Pokemon> PokemonServer::pokemon_from_json(json obj) {
 
 shared_ptr<Pokemon> PokemonServer::pokemon_from_info(PokemonId pid, int exp) {
     if (pid == PokemonEevee) {
-        auto ret = make_shared<PokemonOf<Eevee>>();
+        auto ret = make_shared<PokemonOf<pokemon_of<PokemonEevee>::type>>();
         ret->learn(exp);
         return ret;
     }
     if (pid == PokemonPikachu) {
-        auto ret = make_shared<PokemonOf<Pikachu>>();
+        auto ret = make_shared<PokemonOf<pokemon_of<PokemonPikachu>::type>>();
+        ret->learn(exp);
+        return ret;
+    }
+    if (pid == PokemonZacian) {
+        auto ret = make_shared<PokemonOf<pokemon_of<PokemonZacian>::type>>();
+        ret->learn(exp);
+        return ret;
+    }
+    if (pid == PokemonDragapult) {
+        auto ret = make_shared<PokemonOf<pokemon_of<PokemonDragapult>::type>>();
+        ret->learn(exp);
+        return ret;
+    }
+    if (pid == PokemonZamazenta) {
+        auto ret = make_shared<PokemonOf<pokemon_of<PokemonZamazenta>::type>>();
         ret->learn(exp);
         return ret;
     }
@@ -319,7 +335,9 @@ shared_ptr<Pokemon> PokemonServer::pokemon_from_info(PokemonId pid, int exp) {
 BattleResult PokemonServer::exe_battle(int pokemon_id, int boss_id) {
     assert(_db.table("pokemons").exists(_x_["_id"] == pokemon_id));
     auto pokemon = PokemonServer::pokemon_from_json(_db.table("pokemons").where(_x_["_id"] == pokemon_id).get());
-    return run_battle(pokemon_id, boss_id, pokemon->level());
+    auto boss_level = pokemon->level() + randint(0, 4);
+    boss_level = boss_level > 15 ? 15 : boss_level;
+    return run_battle(pokemon_id, boss_id, boss_level);
 }
 
 BattleResult PokemonServer::real_battle(int pokemon_id, int boss_id) {
@@ -390,9 +408,9 @@ json PokemonServer::compose_battle_step(const BattleStep &step) {
 
 bool PokemonServer::remove_user_pokemon(const QString &username, int id) {
     auto pokemons = _db.table("users")
-                       .where(_x_["username"] == username.toStdString())
-                       .get()["pokemons"]
-                       .get<std::vector<int>>();
+            .where(_x_["username"] == username.toStdString())
+            .get()["pokemons"]
+            .get<std::vector<int>>();
     bool found = false;
     vector<int> p = {};
     for (auto i : pokemons) {
@@ -408,8 +426,8 @@ bool PokemonServer::remove_user_pokemon(const QString &username, int id) {
     }
 
     _db.table("users")
-       .where(_x_["username"] == username.toStdString())
-       .update({{"pokemons", p}});
+            .where(_x_["username"] == username.toStdString())
+            .update({{"pokemons", p}});
 
     return true;
 }
@@ -434,7 +452,11 @@ QByteArray PokemonServer::battle_exe_handler(const json &payload) {
 
     auto res = exe_battle(pid, boss_id);
     if (res.first == LeftWin) {
-        pokemon_learn(pid, Battle::get_exp(1, 1));
+        int exp = Battle::get_exp(
+                res.second[0].left->pokemon()->level(),
+                res.second[0].right->pokemon()->level()
+        );
+        pokemon_learn(pid, exp);
     }
     _db.sync();
 
@@ -462,15 +484,19 @@ QByteArray PokemonServer::battle_real_handler(const json &payload) {
 
     auto res = real_battle(pid, boss_id);
     if (res.first == LeftWin) {
-        pokemon_learn(pid, Battle::get_exp(get_pokemon_by_id(pid)->level(), 15));
+        int exp = Battle::get_exp(
+                res.second[0].left->pokemon()->level(),
+                res.second[0].right->pokemon()->level()
+        );
+        pokemon_learn(pid, exp);
         auto id = create_pokemon(_boss[boss_id]);
         add_user_pokemon(username, id);
     } else {
         remove_user_pokemon(username, pid);
 
         auto pokemons = _db.table("users")
-                           .where(_x_["username"] == username.toStdString())
-                           .get()["pokemons"].get<vector<int>>();
+                .where(_x_["username"] == username.toStdString())
+                .get()["pokemons"].get<vector<int>>();
         if (pokemons.empty()) {
             auto id = create_pokemon(rand_pokemon());
             add_user_pokemon(username, id);
@@ -490,9 +516,9 @@ QByteArray PokemonServer::battle_real_handler(const json &payload) {
  */
 bool PokemonServer::verify_user_pokemon(const QString &username, int pid) {
     auto pokemons = _db.table("users")
-                       .where(_x_["username"] == username.toStdString())
-                       .get()["pokemons"]
-                       .get<std::vector<int>>();
+            .where(_x_["username"] == username.toStdString())
+            .get()["pokemons"]
+            .get<std::vector<int>>();
     for (auto i : pokemons) {
         if (i == pid) {
             return true;
@@ -512,16 +538,16 @@ void PokemonServer::pokemon_learn(int pid, int exp) {
 
 shared_ptr<Pokemon> PokemonServer::get_pokemon_by_id(int pid) {
     auto j = _db.table("pokemons")
-                .where(_x_["_id"] == pid)
-                .get();
+            .where(_x_["_id"] == pid)
+            .get();
     return pokemon_from_json(j);
 }
 
 void PokemonServer::add_user_pokemon(const QString &username, int pid) {
     auto u = username.toStdString();
     auto pokemons = _db.table("users")
-                       .where(_x_["username"] == u)
-                       .get()["pokemons"].get<vector<int>>();
+            .where(_x_["username"] == u)
+            .get()["pokemons"].get<vector<int>>();
     pokemons.push_back(pid);
     _db.where(_x_["username"] == u).update({{"pokemons", pokemons}});
 }
@@ -551,8 +577,8 @@ QByteArray PokemonServer::pokemon_get_id(const json &payload) {
     }
     int idx = payload["idx"].get<int>();
     auto pokemons = _db.table("users")
-                       .where(_x_["username"] == username.toStdString())
-                       .get()["pokemons"].get<vector<int>>();
+            .where(_x_["username"] == username.toStdString())
+            .get()["pokemons"].get<vector<int>>();
     return compose_succ_resp({{"pid", pokemons[idx]}});
 }
 

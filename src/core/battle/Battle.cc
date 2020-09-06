@@ -65,8 +65,7 @@ BattleStatus Battle::check() const {
 
 shared_ptr<Move> get_move(const shared_ptr<PokemonInstance> &instance) {
     auto moves = instance->pokemon()->temp()->moves();
-    auto len = moves.size();
-    auto i = randint(0, len);
+    auto i = weighted_sample(instance->pokemon()->temp()->move_weights());
     return moves[i];
 }
 
@@ -123,4 +122,8 @@ int Battle::get_exp(int this_level, int that_level) {
     }
     int exp = (4 - (this_level - that_level)) * 10;
     return exp < 10 ? 10 : exp;
+}
+
+int Battle::exp_gain() const {
+    return get_exp(_left->pokemon()->level(), _right->pokemon()->level());
 }

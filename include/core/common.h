@@ -7,6 +7,7 @@
 
 #include <ctime>
 #include <cstdlib>
+#include <vector>
 
 typedef unsigned int uint;
 
@@ -23,5 +24,7 @@ double speed2miss(uint d);
 double speed2critical(uint d);
 
 bool sample_miss(double miss_rate);
+
+int weighted_sample(std::vector<int> p);
 
 #endif //POKEMON_CORE_COMMON_H

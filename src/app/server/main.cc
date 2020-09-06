@@ -14,6 +14,7 @@ using json = nlohmann::json;
 
 int main(int argc, char **argv) {
     QCoreApplication app(argc, argv);
+    srand(time(NULL));
 
     PokemonServer server(&app, 12345);
 

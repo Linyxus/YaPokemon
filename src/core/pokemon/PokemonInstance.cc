@@ -13,6 +13,7 @@ shared_ptr<PokemonInstanceOf<T>> get_instance_of(shared_ptr<PokemonOf<T>> pokemo
 
 shared_ptr<PokemonInstance> instance_of(const shared_ptr<Pokemon>& pokemon) {
     PokemonId pid = pokemon->temp()->id();
+    // TODO pid-based if-statements
     if (pid == PokemonEevee) {
         auto p = static_pointer_cast<PokemonOf<pokemon_of<PokemonEevee>::type>>(pokemon);
         auto ret = get_instance_of(p);
@@ -20,6 +21,21 @@ shared_ptr<PokemonInstance> instance_of(const shared_ptr<Pokemon>& pokemon) {
     }
     if (pid == PokemonPikachu) {
         auto p = static_pointer_cast<PokemonOf<pokemon_of<PokemonPikachu>::type>>(pokemon);
+        auto ret = get_instance_of(p);
+        return ret;
+    }
+    if (pid == PokemonZacian) {
+        auto p = static_pointer_cast<PokemonOf<pokemon_of<PokemonZacian>::type>>(pokemon);
+        auto ret = get_instance_of(p);
+        return ret;
+    }
+    if (pid == PokemonDragapult) {
+        auto p = static_pointer_cast<PokemonOf<pokemon_of<PokemonDragapult>::type>>(pokemon);
+        auto ret = get_instance_of(p);
+        return ret;
+    }
+    if (pid == PokemonZamazenta) {
+        auto p = static_pointer_cast<PokemonOf<pokemon_of<PokemonZamazenta>::type>>(pokemon);
         auto ret = get_instance_of(p);
         return ret;
     }

@@ -12,12 +12,12 @@ BufMove::BufMove(shared_ptr<Buff> buff, ActionTarget target) {
 }
 
 Actions BufMove::move(shared_ptr<PokemonInstance> self, shared_ptr<PokemonInstance> target) {
-    return buf_action();
+    return buf_action(this->target);
 }
 
-Actions BufMove::buf_action() const {
+Actions BufMove::buf_action(ActionTarget t) const {
     return {
-        make_shared<BufAction>(buff, target)
+        make_shared<BufAction>(buff, t)
     };
 }
 

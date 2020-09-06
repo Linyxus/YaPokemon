@@ -32,3 +32,7 @@ std::vector<shared_ptr<Move>> Pikachu::moves() const {
             make_shared<Charge>(),
             make_shared<RisingVoltage>()};
 }
+
+std::vector<int> Pikachu::move_weights() const {
+    return { 10, 3, 3 };
+}

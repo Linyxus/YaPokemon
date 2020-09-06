@@ -12,7 +12,9 @@ enum MoveCat {
     MCGrass,
     MCIce,
     MCStorm,
-    MCThunder
+    MCDragon,
+    MCThunder,
+    MCSacred
 };
 
 #endif //POKEMON_CORE_MOVE_H

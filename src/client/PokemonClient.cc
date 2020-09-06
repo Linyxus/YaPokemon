@@ -9,6 +9,7 @@
 #include <utility>
 #include <pokemon/pokemons/eevee.h>
 #include <pokemon/pokemons/pikachu.h>
+#include <pokemon/pokemons/type_map.h>
 
 PokemonClient::PokemonClient(QObject *parent, QHostAddress address, quint16 port)
         : QObject(parent), _socket(this), _token{} {
@@ -57,10 +58,19 @@ shared_ptr<Pokemon> pokemon_from_json(json rec) {
 
     shared_ptr<Pokemon> ret = nullptr;
     if (pid == PokemonEevee) {
-        ret = make_shared<PokemonOf<Eevee>>();
+        ret = make_shared<PokemonOf<pokemon_of<PokemonEevee>::type>>();
     }
     if (pid == PokemonPikachu) {
-        ret = make_shared<PokemonOf<Pikachu>>();
+        ret = make_shared<PokemonOf<pokemon_of<PokemonPikachu>::type>>();
+    }
+    if (pid == PokemonZacian) {
+        ret = make_shared<PokemonOf<pokemon_of<PokemonZacian>::type>>();
+    }
+    if (pid == PokemonDragapult) {
+        ret = make_shared<PokemonOf<pokemon_of<PokemonDragapult>::type>>();
+    }
+    if (pid == PokemonZamazenta) {
+        ret = make_shared<PokemonOf<pokemon_of<PokemonZamazenta>::type>>();
     }
 
     ret->learn(exp);

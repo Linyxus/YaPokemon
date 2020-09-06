@@ -8,7 +8,7 @@
 using yadb::_x_;
 
 TEST(YadbTest, OpenWorks) {
-    yadb::Yadb db("db.json");
+    yadb::Yadb db("db_test.json");
     db.table("users");
 
     db.insert({{"username", "linyxus"}, {"password", "123123"}});
