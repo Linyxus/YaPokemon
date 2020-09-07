@@ -14,6 +14,10 @@ public:
 
     string name() const override;
     Actions move(shared_ptr<PokemonInstance> self, shared_ptr<PokemonInstance> target) override;
+
+    string desc() const override {
+        return "在全场燃起炼狱般的大火，造成大量伤害。且能灼伤对手，降低特防。提升双方火焰技能伤害。";
+    }
 };
 
 

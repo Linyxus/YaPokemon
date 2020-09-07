@@ -12,6 +12,14 @@ public:
     PerishSong();
 
     string name() const override;
+
+    string desc() const override {
+        return "吟唱灭亡之歌。对手在四回合后陷入濒死状态。";
+    }
+
+    MoveCat move_cat() const override {
+        return MCSacred;
+    }
 };
 
 

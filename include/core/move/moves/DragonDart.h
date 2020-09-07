@@ -13,6 +13,10 @@ public:
     ~DragonDart() = default;
 
     string name() const override;
+
+    string desc() const override {
+        return "射出龙族的箭矢，造成伤害";
+    }
 };
 
 

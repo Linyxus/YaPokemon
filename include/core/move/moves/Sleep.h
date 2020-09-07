@@ -14,6 +14,14 @@ public:
 
     Actions move(shared_ptr<PokemonInstance> self, shared_ptr<PokemonInstance> target) override;
     string name() const override;
+
+    string desc() const override {
+        return "休息一下。恢复最大生命值的五分之一。";
+    }
+
+    MoveCat move_cat() const override {
+        return MCNormal;
+    }
 };
 
 

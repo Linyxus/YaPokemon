@@ -12,6 +12,8 @@ Rectangle {
     property string username: "linyxus"
     property int count: 4
     property bool online: true
+    property int winCount: 10
+    property int loseCount: 12
 
     property alias mouseArea: mouseArea
 
@@ -53,7 +55,9 @@ Rectangle {
 
     Text {
         id: countLabel
-        text: "拥有 " + parent.count + " 只精灵"
+        text: "拥有 " + parent.count + " 只精灵" + " 胜率为" + (winCount == 0
+                                                        ? '0'
+                                                        : (winCount / (winCount + loseCount) * 100).toFixed(2)) + '%'
 
         anchors.right: parent.right
         anchors.rightMargin: 18

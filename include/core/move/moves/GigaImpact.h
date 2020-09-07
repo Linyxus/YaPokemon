@@ -13,6 +13,10 @@ public:
     ~GigaImpact() = default;
 
     string name() const override;
+
+    string desc() const override {
+        return "用神兽巨大的剑斩向对手，造成巨量伤害。";
+    }
 };
 
 

@@ -13,6 +13,10 @@ public:
     ~Bite() = default;
 
     string name() const override;
+
+    string desc() const override {
+        return "咬。造成少量伤害。";
+    }
 };
 
 #endif //POKEMON_CORE_BITE_H

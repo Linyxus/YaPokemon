@@ -24,6 +24,8 @@ QVariant ClientModel::getUsers() {
         u->m_username = user.username;
         u->m_pokemon_count = user.pokemons.count();
         u->m_online = user.inactive_duration < 1000 * 60 * 5;
+        u->m_win_count = user.win_count;
+        u->m_lose_count = user.lose_count;
 
         ret << u;
     }
@@ -36,6 +38,7 @@ ClientModel::ClientModel(QHostAddress addr, quint16 port, QObject *parent)
     _users_valid = false;
     _boss_list_valid = false;
     _current_view_user = 0;
+    m_view_pokemon = 0;
 }
 
 void ClientModel::fetch_users() {
@@ -218,5 +221,50 @@ void ClientModel::startRealBattle(int boss_id) {
     }
     emit battleResultChanged();
     emit resultTextChanged();
+}
+
+int ClientModel::getViewSelf() {
+    if (!_users_valid) return false;
+    return _users[_current_view_user].username == _client.username();
+}
+
+int ClientModel::getUserNumBadge() {
+    if (!_users_valid) return 0;
+    auto pokemon_num = _users[_current_view_user].pokemons.length();
+    if (pokemon_num < 5) return 0;
+    if (pokemon_num < 10) return 1;
+    if (pokemon_num < 15) return 2;
+    return 3;
+}
+
+int ClientModel::getUserHLBadge() {
+    if (!_users_valid) return 0;
+    auto hl_num = 0;
+    for (const auto& p : _users[_current_view_user].pokemons) {
+        if (p->level() == 15) {
+            hl_num++;
+        }
+    }
+    if (hl_num < 5) return 0;
+    if (hl_num < 10) return 1;
+    if (hl_num < 15) return 2;
+    return 3;
+}
+
+void ClientModel::setViewPokemon(int sel) {
+    m_view_pokemon = sel;
+    emit viewPokemonChanged();
+}
+
+QList<QObject *> ClientModel::getPokemonMoves() {
+    QList<QObject *> ret;
+    for (auto move : _users[_current_view_user].pokemons[m_view_pokemon]->temp()->moves()) {
+        MoveModel *m = new MoveModel;
+        m->m_name = QString::fromStdString(move->name());
+        m->m_cat = QString::fromStdString(show_move_cat(move->move_cat()));
+        m->m_desc = QString::fromStdString(move->desc());
+        ret << m;
+    }
+    return ret;
 }
 

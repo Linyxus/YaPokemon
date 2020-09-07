@@ -14,6 +14,10 @@ public:
 
     string name() const override;
     Actions move(shared_ptr<PokemonInstance> self, shared_ptr<PokemonInstance> target) override;
+
+    string desc() const override {
+        return "射出冰冻光线。能够冰冻对手，降低速度";
+    }
 };
 
 

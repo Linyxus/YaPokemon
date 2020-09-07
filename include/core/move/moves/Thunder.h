@@ -13,6 +13,10 @@ public:
     ~Thunder() = default;
 
     [[nodiscard]] string name() const override;
+
+    string desc() const override {
+        return "用雷电攻击对手，造成大量伤害。";
+    }
 };
 
 

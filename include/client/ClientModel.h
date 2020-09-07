@@ -20,10 +20,14 @@ Q_OBJECT
     Q_PROPERTY(QString username MEMBER m_username NOTIFY usernameChanged)
     Q_PROPERTY(int pokemonCount MEMBER m_pokemon_count NOTIFY pokemonCountChanged)
     Q_PROPERTY(bool online MEMBER m_online NOTIFY onlineChanged)
+    Q_PROPERTY(int winCount MEMBER m_win_count)
+    Q_PROPERTY(int loseCount MEMBER m_lose_count)
 public:
     QString m_username;
     int m_pokemon_count;
     bool m_online;
+    int m_win_count;
+    int m_lose_count;
 Q_SIGNALS:
 
     void usernameChanged();
@@ -109,6 +113,17 @@ public:
     QList<QObject *> m_steps;
 };
 
+class MoveModel : public QObject {
+    Q_OBJECT
+    Q_PROPERTY(QString name MEMBER m_name)
+    Q_PROPERTY(QString cat MEMBER m_cat)
+    Q_PROPERTY(QString desc MEMBER m_desc)
+public:
+    QString m_name;
+    QString m_cat;
+    QString m_desc;
+};
+
 /**
  * Qml model for client-side logic.
  */
@@ -117,10 +132,15 @@ Q_OBJECT
     Q_PROPERTY(QVariant users READ getUsers NOTIFY usersChanged)
     Q_PROPERTY(QList<QObject *> userPokemons READ getUserPokemons NOTIFY usersChanged)
     Q_PROPERTY(int viewUser READ viewUser NOTIFY viewUserChanged)
+    Q_PROPERTY(int userNumBadge READ getUserNumBadge NOTIFY viewUserChanged)
+    Q_PROPERTY(int userHLBadge READ getUserHLBadge NOTIFY viewUserChanged)
+    Q_PROPERTY(bool viewSelf READ getViewSelf NOTIFY viewUserChanged)
     Q_PROPERTY(QList<QObject *> myPokemons READ getMyPokemons NOTIFY usersChanged)
     Q_PROPERTY(QStringList bossList READ getBossList NOTIFY bossListChanged)
     Q_PROPERTY(QObject* battleResult READ getBattleResult NOTIFY battleResultChanged)
     Q_PROPERTY(QString resultText MEMBER m_result_text NOTIFY resultTextChanged)
+    Q_PROPERTY(int viewPokemon MEMBER m_view_pokemon NOTIFY viewPokemonChanged)
+    Q_PROPERTY(QList<QObject *> pokemonMoves READ getPokemonMoves NOTIFY viewPokemonChanged)
 public:
     ClientModel(QHostAddress addr, quint16 port, QObject *parent = 0);
 
@@ -192,6 +212,12 @@ public:
     Q_INVOKABLE void setViewUser(int i);
 
     /**
+     * Check whether Qml model is set to view the authed user.
+     * @return
+     */
+    int getViewSelf();
+
+    /**
      * Get authenticated user.
      * @return
      */
@@ -233,9 +259,30 @@ public:
     QObject *getBattleResult();
 
     /**
+     * Get user pokemon number badge level.
+     * @return
+     */
+    int getUserNumBadge();
+
+    /**
+     * Get user pokemon high-level badge level.
+     * @return
+     */
+    int getUserHLBadge();
+
+    /**
      * Result text to be shown when the battle finishes.
      */
     QString m_result_text;
+
+    /**
+     * The pokemon currently selected for viewing.
+     */
+    int m_view_pokemon;
+
+    Q_INVOKABLE void setViewPokemon(int sel);
+
+    QList<QObject *> getPokemonMoves();
 
 Q_SIGNALS:
 
@@ -252,6 +299,8 @@ Q_SIGNALS:
     void battleResultChanged();
 
     void resultTextChanged();
+
+    void viewPokemonChanged();
 
 private:
     void fetch_users();

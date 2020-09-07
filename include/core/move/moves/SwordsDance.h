@@ -13,6 +13,14 @@ public:
     ~SwordsDance() = default;
 
     string name() const override;
+
+    string desc() const override {
+        return "舞剑，大幅提升攻击。";
+    }
+
+    MoveCat move_cat() const override {
+        return MCSacred;
+    }
 };
 
 

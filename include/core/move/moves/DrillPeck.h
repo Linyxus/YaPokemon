@@ -13,6 +13,10 @@ public:
     ~DrillPeck() = default;
 
     string name() const override;
+
+    string desc() const override {
+        return "猛啄对手。造成大量伤害。";
+    }
 };
 
 

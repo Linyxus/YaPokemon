@@ -38,6 +38,8 @@
         <file>static/霸王花.png</file>
         <file>static/拉普拉斯.png</file>
         <file>static/百变怪.png</file>
+        <file>qml/PokemonView.qml</file>
+        <file>qml/MoveList.qml</file>
     </qresource>
     <qresource prefix="/static"/>
     <qresource prefix="/static" lang="zh-cn"/>

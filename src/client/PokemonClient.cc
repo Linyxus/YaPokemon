@@ -131,8 +131,10 @@ PokemonUser user_from_json(json obj, const QVector<shared_ptr<Pokemon>> &all_pok
     for (auto i : pokemon_indices) {
         pokemons.push_back(all_pokemons[i]);
     }
+    auto win_count = obj["win_count"].get<int>();
+    auto lose_count = obj["lose_count"].get<int>();
 
-    return {username, pokemons, inactive_duration};
+    return {username, pokemons, inactive_duration, win_count, lose_count};
 }
 
 QVector<PokemonUser> PokemonClient::get_users() {

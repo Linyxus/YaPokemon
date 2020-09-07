@@ -58,6 +58,10 @@ bool PokemonServer::user_register(const QString &username, const QString &passwo
                  {"salt",     salt.toStdString()},
                  {"pokemons", pokemons}}
         );
+        _db.table("battle_records")
+                .insert({{"username", u},
+                         {"win",      0},
+                         {"lose",     0}});
         _db.sync();
         return true;
     }
@@ -228,6 +232,13 @@ int PokemonServer::inactive_duration(const QString &username) {
     return now - last_active;
 }
 
+pair<int, int> PokemonServer::win_lose_count(const QString &username) {
+    auto u = username.toStdString();
+    auto win = _db.table("battle_records").where(_x_["username"] == u).get()["win"].get<int>();
+    auto lose = _db.table("battle_records").where(_x_["username"] == u).get()["lose"].get<int>();
+    return { win, lose };
+}
+
 json PokemonServer::compose_user_json(const QString &username) {
     auto u = username.toStdString();
     assert(_db.table("users").exists(_x_["username"] == u));
@@ -236,6 +247,9 @@ json PokemonServer::compose_user_json(const QString &username) {
     ret["username"] = u;
     ret["pokemons"] = user["pokemons"];
     ret["inactive_duration"] = inactive_duration(username);
+    auto win_lose = win_lose_count(username);
+    ret["win_count"] = win_lose.first;
+    ret["lose_count"] = win_lose.second;
 
     return ret;
 }
@@ -503,6 +517,19 @@ QByteArray PokemonServer::battle_exe_handler(const json &payload) {
         );
         pokemon_learn(pid, exp);
     }
+
+    auto u = username.toStdString();
+    if (res.first == LeftWin) {
+        auto win_cnt = _db.table("battle_records")
+                .where(_x_["username"] == u)
+                .get()["win"].get<int>();
+        _db.where(_x_["username"] == u).update({{"win", win_cnt + 1}});
+    } else {
+        auto lose_cnt = _db.table("battle_records")
+                .where(_x_["username"] == u)
+                .get()["lose"].get<int>();
+        _db.where(_x_["username"] == u).update({{"lose", lose_cnt + 1}});
+    }
     _db.sync();
 
     auto result = compose_battle_result(res);
@@ -546,6 +573,19 @@ QByteArray PokemonServer::battle_real_handler(const json &payload) {
             auto id = create_pokemon(rand_pokemon());
             add_user_pokemon(username, id);
         }
+    }
+
+    auto u = username.toStdString();
+    if (res.first == LeftWin) {
+        auto win_cnt = _db.table("battle_records")
+                .where(_x_["username"] == u)
+                .get()["win"].get<int>();
+        _db.where(_x_["username"] == u).update({{"win", win_cnt + 1}});
+    } else {
+        auto lose_cnt = _db.table("battle_records")
+                .where(_x_["username"] == u)
+                .get()["lose"].get<int>();
+        _db.where(_x_["username"] == u).update({{"lose", lose_cnt + 1}});
     }
     _db.sync();
 
@@ -626,4 +666,5 @@ QByteArray PokemonServer::pokemon_get_id(const json &payload) {
             .get()["pokemons"].get<vector<int>>();
     return compose_succ_resp({{"pid", pokemons[idx]}});
 }
+
 

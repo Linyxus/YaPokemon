@@ -14,6 +14,14 @@ public:
 
     string name() const override;
     Actions move(shared_ptr<PokemonInstance> self, shared_ptr<PokemonInstance> target) override;
+
+    string desc() const override {
+        return "进行钢铁般的防御。大幅提升特攻与特防";
+    }
+
+    MoveCat move_cat() const override {
+        return MCNormal;
+    }
 };
 
 

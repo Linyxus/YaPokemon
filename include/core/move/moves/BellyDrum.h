@@ -14,6 +14,13 @@ public:
 
     string name() const override;
     Actions move(shared_ptr<PokemonInstance> self, shared_ptr<PokemonInstance> target) override;
+    string desc() const override {
+        return "用力击打腹部来鼓舞斗志。消耗一半生命值，让攻击大幅提高。";
+    }
+
+    MoveCat move_cat() const override {
+        return MCNormal;
+    }
 };
 
 

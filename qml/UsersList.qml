@@ -11,9 +11,12 @@ ListView {
         username: modelData.username
         count: modelData.pokemonCount
         online: modelData.online
+        winCount: modelData.winCount
+        loseCount: modelData.loseCount
 
         mouseArea.onClicked: {
             client_model.setViewUser(index)
+            console.log(modelData)
             client_model.pushPage("UserProfileView.qml")
         }
     }

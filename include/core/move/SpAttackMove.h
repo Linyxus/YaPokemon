@@ -17,6 +17,8 @@ public:
     Actions attack_action(const shared_ptr<PokemonInstance>& self);
     llint power;
     MoveCat cat;
+
+    virtual MoveCat move_cat() const override { return cat; }
 };
 
 #endif //POKEMON_CORE_SPATTACKMOVE_H

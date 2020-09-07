@@ -13,6 +13,14 @@ public:
     ~QuickGuard() = default;
 
     string name() const override;
+
+    string desc() const override {
+        return "摆出防御的姿态，提升防御";
+    }
+
+    MoveCat move_cat() const override {
+        return MCNormal;
+    }
 };
 
 

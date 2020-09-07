@@ -13,6 +13,14 @@ public:
     ~Charge() = default;
 
     string name() const override;
+
+    string desc() const override {
+        return "充电准备攻击，大幅提升特攻。";
+    }
+
+    MoveCat move_cat() const override {
+        return MCThunder;
+    }
 };
 
 #endif //POKEMON_CORE_CHARGE_H

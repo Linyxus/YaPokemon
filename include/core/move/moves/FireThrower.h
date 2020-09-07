@@ -14,6 +14,10 @@ public:
 
     string name() const override;
     Actions move(shared_ptr<PokemonInstance> self, shared_ptr<PokemonInstance> target) override;
+
+    string desc() const override {
+        return "喷射火焰，造成大量伤害，并能灼伤对手降低特防";
+    }
 };
 
 

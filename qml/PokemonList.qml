@@ -19,7 +19,13 @@ ListView {
 
         mouseArea.onClicked: {
             console.log(modelData.name)
-            contextMenu.open()
+            if (client_model.viewSelf) {
+                client_model.setViewPokemon(index)
+                client_model.pushPage("PokemonView.qml")
+            } else {
+                client_model.setViewPokemon(index)
+                client_model.pushPage("PokemonView.qml")
+            }
         }
 
         Menu {
@@ -29,7 +35,6 @@ ListView {
             y: parent.height
             x: 10
             MenuItem { text: "丢弃精灵" }
-            MenuItem { text: "使用经验糖果" }
         }
     }
 }

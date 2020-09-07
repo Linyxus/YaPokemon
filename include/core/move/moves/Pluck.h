@@ -14,6 +14,10 @@ public:
 
     string name() const override;
     Actions move(shared_ptr<PokemonInstance> self, shared_ptr<PokemonInstance> target) override;
+
+    string desc() const override {
+        return "啄食，造成伤害，恢复生命。";
+    }
 };
 
 

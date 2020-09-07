@@ -38,6 +38,7 @@ Rectangle {
         anchors.right: parent.right
         anchors.top: headerRect.bottom
         anchors.bottom: parent.bottom
+        clip: true
 
         BossList {
             anchors.fill: parent

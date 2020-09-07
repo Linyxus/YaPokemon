@@ -13,6 +13,14 @@ public:
     ~RisingVoltage() = default;
 
     string name() const override;
+
+    string desc() const override {
+        return "强行增加电压。大幅提升电类技能伤害";
+    }
+
+    MoveCat move_cat() const override {
+        return MCThunder;
+    }
 };
 
 

@@ -13,6 +13,10 @@ public:
     ~DragonClaw() = default;
 
     string name() const override;
+
+    string desc() const override {
+        return "用爪子攻击对手，造成伤害。";
+    }
 };
 
 

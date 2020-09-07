@@ -27,6 +27,7 @@ private:
     QString check_req_auth(json payload);
     void pulse(const QString &username);
     int inactive_duration(const QString &username);
+    pair<int, int> win_lose_count(const QString &username);
     BattleResult run_battle(int pokemon_id, int boss_id, int boss_level);
     BattleResult exe_battle(int pokemon_id, int boss_id);
     BattleResult real_battle(int pokemon_id, int boss_id);

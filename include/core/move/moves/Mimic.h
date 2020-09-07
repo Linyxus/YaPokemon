@@ -12,6 +12,14 @@ class Mimic : public Move {
 public:
     Actions move(shared_ptr<PokemonInstance> self, shared_ptr<PokemonInstance> target) override;
     string name() const override;
+
+    string desc() const override {
+        return "模仿对手，使出对手的技能。";
+    }
+
+    MoveCat move_cat() const override {
+        return MCNormal;
+    }
 };
 
 

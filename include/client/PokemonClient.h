@@ -18,6 +18,8 @@ struct PokemonUser {
     QString username;
     QVector<shared_ptr<Pokemon>> pokemons;
     int inactive_duration;
+    int win_count;
+    int lose_count;
 };
 
 struct PokemonState {

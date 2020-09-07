@@ -13,6 +13,10 @@ public:
     ~SacredBlade() = default;
 
     string name() const override;
+
+    string desc() const override {
+        return "挥舞圣剑，造成伤害。";
+    }
 };
 
 

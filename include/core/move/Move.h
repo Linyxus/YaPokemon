@@ -19,6 +19,8 @@ public:
 
     virtual Actions move(shared_ptr<PokemonInstance> self, shared_ptr<PokemonInstance> target) = 0;
     virtual string name() const = 0;
+    virtual string desc() const = 0;
+    virtual MoveCat move_cat() const = 0;
 };
 
 #endif //POKEMON_CORE_MOVE_H
