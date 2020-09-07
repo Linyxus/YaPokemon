@@ -36,7 +36,7 @@ double speed2miss(llint d) {
 double speed2critical(llint d) {
     // TODO design speed -> critical rate function
     // pick up here!
-    return 0;
+    return -1 / (1 + d / 200.0) + 1;
 }
 
 llint ensure_range(int x, llint low, llint high) {

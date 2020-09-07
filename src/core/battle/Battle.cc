@@ -78,12 +78,15 @@ BattleRound Battle::proceed() {
     Actions actions;
     shared_ptr<Move> move = nullptr;
     llint speed = turn == RightTurn ? _left->current().speed : _right->current().speed;
+    llint ispeed = turn == LeftTurn ? _left->current().speed : _right->current().speed;
     double miss_rate = speed2miss(speed);
+    double critical_rate = speed2critical(ispeed);
     bool miss = sample_miss(miss_rate);
+    bool critical = sample_miss(critical_rate);
     if (miss) {
         _turn_count += 1;
         return {
-            turn, move, actions, miss
+            turn, move, actions, miss, false
         };
     }
     if (turn == LeftTurn) {
@@ -91,9 +94,9 @@ BattleRound Battle::proceed() {
         actions = move->move(_left, _right);
         for (const auto &action : actions) {
             if (action->target() == ActSelf) {
-                _left->accept_action(action);
+                _left->accept_action(action, critical);
             } else {
-                _right->accept_action(action);
+                _right->accept_action(action, critical);
             }
         }
 
@@ -114,7 +117,7 @@ BattleRound Battle::proceed() {
 
     _turn_count += 1;
     return {
-            turn, move, actions, miss
+            turn, move, actions, miss, critical
     };
 }
 

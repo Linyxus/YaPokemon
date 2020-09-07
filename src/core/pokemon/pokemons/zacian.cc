@@ -35,5 +35,5 @@ std::vector<shared_ptr<Move>> Zacian::moves() const {
 }
 
 std::vector<int> Zacian::move_weights() const {
-    return {30, 60, 30, 50};
+    return {30, 80, 30, 50};
 }

@@ -24,6 +24,7 @@ struct BattleRound {
     shared_ptr<Move> move;
     Actions actions;
     bool miss;
+    bool critical;
 };
 
 class Battle {

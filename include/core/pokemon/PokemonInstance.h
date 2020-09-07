@@ -26,7 +26,7 @@ public:
 
     virtual Hexagon<llint> current() const = 0;
 
-    virtual void accept_action(shared_ptr<Action> action) = 0;
+    virtual void accept_action(shared_ptr<Action> action, bool critical = false) = 0;
 
     virtual void accept_actions(const Actions &actions) {
         for (const auto &act : actions) {
@@ -51,7 +51,7 @@ public:
 
     Hexagon<llint> current() const override;
 
-    void accept_action(shared_ptr<Action> action) override;
+    void accept_action(shared_ptr<Action> action, bool critical) override;
 
     vector<shared_ptr<Buff>> buff() const override;
 
@@ -86,12 +86,13 @@ Hexagon<llint> PokemonInstanceOf<T>::current() const {
 }
 
 template<typename T>
-void PokemonInstanceOf<T>::accept_action(shared_ptr<Action> action) {
+void PokemonInstanceOf<T>::accept_action(shared_ptr<Action> action, bool critical) {
     if (action->type() == ActAttack) {
         shared_ptr<AttackAction> p = dynamic_pointer_cast<AttackAction, Action>(action);
         double r = defense2rate(_current.defense);
         r = 1. - r;
         llint val = (int) (r * p->value);
+        if (critical) val *= 2;
         if (this->_current.hp >= val) {
             this->_current.hp -= val;
         } else {
@@ -103,6 +104,7 @@ void PokemonInstanceOf<T>::accept_action(shared_ptr<Action> action) {
         double r = defense2rate(_current.spDefense);
         r = 1. - r;
         llint val = (int) (r * p->value);
+        if (critical) val *= 2;
         if (this->_current.hp >= val) {
             this->_current.hp -= val;
         } else {
@@ -115,7 +117,9 @@ void PokemonInstanceOf<T>::accept_action(shared_ptr<Action> action) {
     }
     if (action->type() == ActHeal) {
         shared_ptr<HealAction> heal_act = dynamic_pointer_cast<HealAction>(action);
-        this->_current.hp += heal_act->value;
+        int val = heal_act->value;
+        if (critical) val *= 2;
+        this->_current.hp += val;
         if (this->_current.hp < 0) {
             this->_current.hp = 0;
         }
